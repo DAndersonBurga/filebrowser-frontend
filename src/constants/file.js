@@ -1,0 +1,10 @@
+const FILE_TYPE = {
+    TXT: "TXT_FILE",
+    DIRECTORY: "DIRECTORY",
+    VIRTUAL_DISK: "VIRTUAL_DISK"
+
+}
+
+export {
+    FILE_TYPE
+}

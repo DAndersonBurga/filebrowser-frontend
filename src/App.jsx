@@ -1,17 +1,33 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from "./layout/MainLayout"
 import Index from "./pages/Index"
+import { GlobalContextProvider } from "./context/GlobalContext";
+import DirectoryContent from "./components/DirectoryContent";
+import DiskContent from "./components/DiskContent";
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Index />} />
-        </Route>
+      <GlobalContextProvider>
+        <Routes>
+          <Route path="/" element={<div>Pagina para crear un sistema de archivos</div>} />
+          
+          <Route path="/app" element={<MainLayout />}>
+            <Route index element={<Index />} />
 
-      </Routes>
+            <Route path=":diskId">
+              <Route index element={<DiskContent />} />
+              <Route path=":directoryId" element={<DirectoryContent />} />
+            </Route>
+          </Route>
+
+        </Routes>
+
+        <ToastContainer />
+      </GlobalContextProvider>
     </BrowserRouter>
   )
 }

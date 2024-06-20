@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-context {
+    @apply w-full text-left hover:bg-gray-200 p-1;
+}

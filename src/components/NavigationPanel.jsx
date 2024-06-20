@@ -1,4 +1,4 @@
-import SearchIcon from "../../icons/search/SearchIcon";
+import SearchIcon from "../icons/search/SearchIcon";
 
 const NavigationPanel = () => {
 
