@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .btn-context {
-    @apply w-full text-left hover:bg-gray-200 p-1;
+    @apply w-full text-left hover:bg-gray-200 p-1 disabled:opacity-50 disabled:hover:bg-none;
 }

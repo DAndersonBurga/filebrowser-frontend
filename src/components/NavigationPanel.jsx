@@ -1,10 +1,21 @@
+import { useMemo } from "react";
+import useGlobalContext from "../hooks/useGlobalContext";
 import SearchIcon from "../icons/search/SearchIcon";
 
 const NavigationPanel = () => {
 
+  const { store } = useGlobalContext();
+  const { stackPath, peekFromStackPath } = store;
+
+  const path = useMemo(() => peekFromStackPath(), [stackPath])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Buscando archivos...");
+  }
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
   }
 
   return (
@@ -12,8 +23,9 @@ const NavigationPanel = () => {
         <form className="w-full">
           <input
             className="w-full p-1 rounded-md bg-transparent border border-white/60" 
-            type="text" 
-            defaultValue="/D/tareas/programacion" 
+            type="text"
+            value={path}
+            onChange={handleChange}
           />
         </form>
 

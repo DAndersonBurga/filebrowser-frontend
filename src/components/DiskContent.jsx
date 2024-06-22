@@ -6,6 +6,7 @@ import ContextMenu from "./ContextMenu"
 import { getFilesFromDisk } from "../helpers/disks"
 import FileForm from "./FileForm"
 import CustomModal from "./CustomModal"
+import Table from "./Table"
 
 const DiskContent = () => {
     const { store } = useGlobalContext()
@@ -16,6 +17,7 @@ const DiskContent = () => {
     const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {
+        
         const getFiles = async () => {
             const { data } = await getFilesFromDisk(diskId)
             setFiles(data)
@@ -64,21 +66,17 @@ const DiskContent = () => {
             </ContextMenu>
         )}
 
-        <div>
-            {files?.length === 0 && <p>No hay archivos</p>}
-
-            {files?.map(file => (
-                <div key={file.id}>
-                    <p>{file.name}</p>
-                </div>
-            ))}
-        </div>
+        <Table
+            files={files}
+        />
 
         <CustomModal
             open={openModal}
             handleClose={handleClose}
         >
-            <FileForm />
+            <FileForm 
+                handleClose={handleClose}
+            />
         </CustomModal>
     </section>
   )

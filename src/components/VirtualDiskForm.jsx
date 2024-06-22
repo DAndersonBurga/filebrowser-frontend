@@ -6,6 +6,7 @@ import useGlobalContext from "../hooks/useGlobalContext";
 const VirtualDiskForm = ({ handleClose }) => {
 
     const { handleSubmit, register } = useForm()
+
     const { store } = useGlobalContext()
     const { setDisks } = store
 
@@ -37,7 +38,7 @@ const VirtualDiskForm = ({ handleClose }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="p-4 text-black/85 bg-white w-96"
         >
-            <h1 className="text-blue-500 text-center text-2xl font-bold mb-4">Nuevo Disco Virtual</h1>
+            <h2 className="text-blue-500 text-center text-2xl font-bold mb-4">Nuevo Disco Virtual</h2>
 
             <div className="flex gap-2 items-center mb-2">
                 <label htmlFor="label">Etiqueta: </label>

@@ -11,7 +11,7 @@ import ContextMenu from "../components/ContextMenu";
 const Index = () => {
 
   const { store } = useGlobalContext()
-  const { disks, setDisks } = store
+  const { disks, setDisks, pushToStackPath, setStackPath } = store
 
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 })
   const [open, setOpen] = useState(false)
@@ -35,7 +35,7 @@ const Index = () => {
     } else if(e.target.tagName === "A"){
       setDiskId(e.target.id)
     } else {
-      return;
+      setDiskId("")
     }
 
     setContextMenu({
@@ -46,6 +46,8 @@ const Index = () => {
   }
 
   useEffect(() => {
+    setStackPath([])
+
     const fetchData = async () => {
       const { data } = await getAllDisks()
       setDisks(data)
@@ -77,9 +79,7 @@ const Index = () => {
             Nuevo
           </button>
 
-          {diskId && (
-            <button className="w-full p-1 text-left hover:bg-gray-200">Eliminar</button>
-          )}
+          <button className={"btn-context"} disabled={diskId === ""}>Eliminar</button>
         </ContextMenu>
       )}
 
@@ -90,6 +90,7 @@ const Index = () => {
             className="flex flex-col gap-2 hover:opacity-80 hover:scale-105 transition-all duration-300 ease-in-out bg-slate-200 p-2 rounded-md text-blue-500"
             to={`/app/${disk.id}`}
             id={disk.id}
+            onClick={() => pushToStackPath(disk.path)}
           >
             <HardDiskIcon
               className="size-14"
