@@ -1,16 +1,13 @@
-import { Link, useNavigate, useParams } from "react-router-dom"
-import { FILE_TYPE } from "../constants/file"
-import FolderIcon from "../icons/files/FolderIcon"
-import TextFileIcon from "../icons/files/TextFileIcon"
+import { useNavigate } from "react-router-dom"
 import BackIcon from "../icons/other/BackIcon"
 import useGlobalContext from "../hooks/useGlobalContext"
+import File from "./File"
 
 const Table = ({ files }) => {
 
     const { store } = useGlobalContext()
-    const { pushToStackPath, popFromStackPath } = store;
+    const { popFromStackPath } = store;
 
-    const { diskId } = useParams();
     const navigate = useNavigate();
 
     const handleOnClickBack = () => {
@@ -20,7 +17,7 @@ const Table = ({ files }) => {
     }
 
     return (
-        <div className="relative overflow-x-auto shadow-sm">
+        <div className="relative overflow-x-auto overflow-y-auto shadow-sm">
             <button onClick={handleOnClickBack}
                 colSpan="6" className="text-center p-4 flex items-center gap-2 hover:opacity-80">
                 <BackIcon className="size-6 text-amber-600" />
@@ -59,47 +56,10 @@ const Table = ({ files }) => {
                     )}
 
                     {files?.map(file => (
-                        <tr 
-                            className="bg-white border-b  hover:bg-gray-50"
-                            id={file.id}
+                        <File 
                             key={file.id}
-                        >
-                            <td className="w-4 p-4">
-                                <div className="flex items-center">
-                                    <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-                                    <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                </div>
-                            </td>
-
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex gap-1 items-center">
-                                {file?.fileType === FILE_TYPE.TXT ? (
-                                    <>
-                                        <TextFileIcon className="w-6 h-6 text-amber-500" />
-                                        {file.name}
-                                    </>
-                                ): (
-                                    <Link 
-                                        onClick={() => pushToStackPath(file.path)}
-                                        to={`/app/${diskId}/${file.id}`} className="flex gap-1 items-center hover:text-blue-600">
-                                        <FolderIcon className="w-6 h-6 text-blue-500" />
-                                        {file.name}
-                                    </Link>
-                                )}
-                            </th>
-                            <td className="px-6 py-4">
-                                {file.size}
-                            </td>
-                            <td className="px-6 py-4">
-                                {file.creationAt}
-                            </td>
-                            <td className="px-6 py-4">
-                                {file.lastModifiedAt}
-                            </td>
-                            <td className="flex items-center px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
-                                <a href="#" className="font-medium text-red-600 hover:underline ms-3">Remove</a>
-                            </td>
-                        </tr>
+                            file={file}
+                        />
                     ))}
 
                     

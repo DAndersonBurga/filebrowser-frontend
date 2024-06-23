@@ -18,9 +18,25 @@ const createDirectory = async (data, diskId, directoryId) => {
     return response;
 }
 
+const copyFile = async (data) => {
+
+    const newData = {
+        sourceDiskId: data.sourceDiskId,
+        sourceParentId: data.sourceParentId,
+        fileId: data.fileId,
+        destinationDiskId: data.destinationDiskId,
+        destinationParentId: data.destinationParentId
+    }
+
+    const response = await apiFileBrowser.post(`/file/copy`, newData)
+
+    return response;
+}
+
 
 export {
     getFilesFromDirectory,
     createTxtFile,
-    createDirectory
+    createDirectory,
+    copyFile
 }

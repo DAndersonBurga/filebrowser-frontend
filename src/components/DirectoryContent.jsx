@@ -6,11 +6,13 @@ import Table from "./Table"
 import CustomModal from "./CustomModal"
 import FileForm from "./FileForm"
 import useGlobalContext from "../hooks/useGlobalContext"
-import { getFilesFromDirectory } from "../helpers/files"
+import { copyFile, getFilesFromDirectory } from "../helpers/files"
+import { FILE_ACTION } from "../constants/file"
+import { toast } from "react-toastify"
 
 const DirectoryContent = () => {
     const { store } = useGlobalContext()
-    const { files, setFiles } = store
+    const { files, setFiles, selectedFileId, setSelectedFileId, elementActionInfo,  setElementActionInfo} = store
     
     const { diskId, directoryId } = useParams()
     const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 })
@@ -40,12 +42,68 @@ const DirectoryContent = () => {
 
     const handleOnAuxClick = (e) => {
         e.preventDefault()
-    
+
         setContextMenu({
           visible: !contextMenu?.visible,
-          x: e.clientX - 225,
-          y: e.clientY - 150
+          x: e.clientX,
+          y: e.clientY
         })
+    }
+
+    const handleClickCutAction = () => {
+        setElementActionInfo({
+            action: FILE_ACTION.CUT,
+            sourceDiskId: diskId,
+            sourceParentId: directoryId,
+            fileId: selectedFileId,
+            destinationDiskId: "",
+            destinationParentId: ""
+        })
+    }
+
+    const handleClickCopyAction = () => {
+
+        setElementActionInfo({
+            action: FILE_ACTION.COPY,
+            sourceDiskId: diskId,
+            sourceParentId: directoryId,
+            fileId: selectedFileId,
+            destinationDiskId: "",
+            destinationParentId: ""
+        })
+    }
+
+    const handleClickPasteAction = async () => {
+        
+
+        elementActionInfo.destinationDiskId = diskId
+        elementActionInfo.destinationParentId = directoryId
+
+        const { sourceDiskId, sourceParentId, destinationDiskId, destinationParentId, action } = elementActionInfo
+
+        if(Object.values(elementActionInfo).includes("")) {
+            return;
+        }
+
+        if(action === FILE_ACTION.COPY) {
+
+            const copyResponse = await copyFile(elementActionInfo);
+            setElementActionInfo({})
+            setSelectedFileId("")
+            toast.success(copyResponse.data.message)
+
+        } else {
+            
+            if(destinationDiskId === sourceDiskId && 
+                destinationParentId === sourceParentId) {
+                return;
+            }
+
+            // Implement cut action
+        }
+
+        const filesResponse = await getFilesFromDirectory(diskId, directoryId)
+        setFiles(filesResponse.data)
     }
 
     const open = () => setOpenModal(true)
@@ -53,7 +111,7 @@ const DirectoryContent = () => {
 
   return (
     <section 
-        className="h-full bg-slate-100 p-2 text-black relative"
+        className="h-full bg-slate-100 p-2 text-black overflow-y-auto"
         onAuxClick={handleOnAuxClick}
         onContextMenu={(e) => e.preventDefault()}
         onClick={() => setContextMenu({ visible: false, x: 0, y: 0 })}
@@ -70,8 +128,30 @@ const DirectoryContent = () => {
                 >
                     Nuevo
                 </button>
+                <button
+                    onClick={handleClickCutAction}
+                    className="btn-context"
+                    disabled={selectedFileId === ""}
+                >
+                    Cortar
+                </button>
+                <button 
+                    onClick={handleClickCopyAction}
+                    className="btn-context"
+                    disabled={selectedFileId === ""}
+                >
+                    Copiar
+                </button>
+                <button 
+                    onClick={handleClickPasteAction}
+                    className="btn-context"
+                    disabled={elementActionInfo?.fileId === ""}
+                >
+                    Pegar
+                </button>
                 <button 
                     className="btn-context"
+                    disabled={selectedFileId === ""}
                 >
                     Eliminar
                 </button>

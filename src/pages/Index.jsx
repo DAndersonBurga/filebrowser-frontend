@@ -40,9 +40,10 @@ const Index = () => {
 
     setContextMenu({
       visible: !contextMenu?.visible,
-      x: e.clientX - 225,
-      y: e.clientY - 150
+      x: e.clientX,
+      y: e.clientY
     })
+
   }
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const Index = () => {
 
   return (
     <section 
-      className="h-full bg-slate-100 p-2 text-black relative"
+      className="h-full bg-slate-100 p-2 text-black overflow-y-auto"
       onContextMenu={(e) => e.preventDefault()}
       onAuxClick={handleOnAuxClick}
       onClick={() => setContextMenu({ visible: false, x: 0, y: 0 })}
@@ -80,6 +81,8 @@ const Index = () => {
           </button>
 
           <button className={"btn-context"} disabled={diskId === ""}>Eliminar</button>
+          <button className={"btn-context"} disabled={diskId === ""}>Propiedades</button>
+          <button className={"btn-context"} disabled={diskId === ""}>Editar</button>
         </ContextMenu>
       )}
 

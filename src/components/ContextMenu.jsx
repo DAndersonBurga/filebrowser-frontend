@@ -1,10 +1,17 @@
-
 const ContextMenu = ({ x, y, children }) => {
+
+    const threshold = window.innerHeight * 0.75;
+    
+
     return (
         <div
             style={{
                 position: 'absolute',
-                top: `${y}px`,
+                top: `${
+                    y > threshold
+                        ? y - 150
+                        : y
+                }px`,
                 left: `${x}px`,
                 backgroundColor: 'white',
                 border: '1px solid #ccc',

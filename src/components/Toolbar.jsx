@@ -9,7 +9,7 @@ import HardDiskIcon from "../icons/files/HardDiskIcon"
 
 const Toolbar = () => {
   return (
-    <section className="w-full bg-gray-700 h-28 flex items-center px-4 text-white gap-6">
+    <section className="w-full bg-gray-700 h-28 flex items-center px-4 py-2 text-white gap-6">
         <button className="flex flex-col items-center hover:opacity-80">
             <FilePropertiesIcon className="size-12 text-indigo-400" />
             <p>Propiedades</p>

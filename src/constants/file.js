@@ -5,6 +5,12 @@ const FILE_TYPE = {
 
 }
 
+const FILE_ACTION = {
+    CUT: "CUT",
+    COPY: "COPY"
+}
+
 export {
-    FILE_TYPE
+    FILE_TYPE,
+    FILE_ACTION
 }
