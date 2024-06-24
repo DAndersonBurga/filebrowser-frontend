@@ -17,7 +17,6 @@ const File = ({ file }) => {
     } 
 
     const handleClick = () => {
-        console.log("Click");
         if(selectedFileId === file.id) {
             setSelectedFileId("")
             return;

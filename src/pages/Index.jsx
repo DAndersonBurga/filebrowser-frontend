@@ -64,8 +64,8 @@ const Index = () => {
       onAuxClick={handleOnAuxClick}
       onClick={() => setContextMenu({ visible: false, x: 0, y: 0 })}
     >
-      <h1 className="text-3xl font-semibold mb-5 text-gray-700">Dispositivos y unidades</h1>
 
+      <h1 className="text-3xl font-semibold mb-5 text-gray-700">Dispositivos y unidades</h1>
       { contextMenu?.visible && ( 
         <ContextMenu 
           x={contextMenu.x} 

@@ -18,6 +18,14 @@ const createDirectory = async (data, diskId, directoryId) => {
     return response;
 }
 
+const deleteFile = async (idDisk, idParent, idFile) => {
+    const response = await apiFileBrowser.delete(`/file/delete/${idDisk}/${
+        idParent ? idParent : idDisk
+    }/${idFile}`)
+
+    return response;
+}
+
 const copyFile = async (data) => {
 
     const newData = {
@@ -33,10 +41,25 @@ const copyFile = async (data) => {
     return response;
 }
 
+const cutFile = async (data) => {
+    const newData = {
+        sourceDiskId: data.sourceDiskId,
+        sourceParentId: data.sourceParentId,
+        fileId: data.fileId,
+        destinationDiskId: data.destinationDiskId,
+        destinationParentId: data.destinationParentId
+    }
+
+    const response = await apiFileBrowser.post(`/file/cut`, newData)
+
+    return response;
+}
 
 export {
     getFilesFromDirectory,
     createTxtFile,
     createDirectory,
-    copyFile
+    copyFile,
+    cutFile,
+    deleteFile
 }

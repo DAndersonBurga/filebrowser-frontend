@@ -106,6 +106,18 @@ const DirectoryContent = () => {
         setFiles(filesResponse.data)
     }
 
+    const handleClickDeleteAction = async () => {
+        try {
+            await deleteFile(diskId, directoryId, selectedFileId)
+            toast.success("Archivo eliminado correctamente")
+
+            const filesResponse = await getFilesFromDirectory(diskId, directoryId)
+            setFiles(filesResponse.data)
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
+    }
+
     const open = () => setOpenModal(true)
     const handleClose = () => setOpenModal(false)
 
@@ -152,6 +164,7 @@ const DirectoryContent = () => {
                 <button 
                     className="btn-context"
                     disabled={selectedFileId === ""}
+                    onClick={handleClickDeleteAction}
                 >
                     Eliminar
                 </button>

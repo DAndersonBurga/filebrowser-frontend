@@ -8,7 +8,7 @@ import FileForm from "./FileForm"
 import CustomModal from "./CustomModal"
 import Table from "./Table"
 import { FILE_ACTION } from "../constants/file"
-import { copyFile } from "../helpers/files"
+import { copyFile, deleteFile } from "../helpers/files"
 import { toast } from "react-toastify"
 
 const DiskContent = () => {
@@ -28,6 +28,7 @@ const DiskContent = () => {
 
         getFiles()
     }, [])
+
 
     const handleOnAuxClick = (e) => {
         e.preventDefault()
@@ -96,6 +97,18 @@ const DiskContent = () => {
         setFiles(filesResponse.data)
     }
 
+    const handleClickDeleteAction = async () => {
+        try {
+            await deleteFile(diskId, diskId, selectedFileId)
+            toast.success("Archivo eliminado correctamente")
+
+            const filesResponse = await getFilesFromDisk(diskId)
+            setFiles(filesResponse.data)
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
+    }
+
   return (
     <section 
         className="h-full bg-slate-100 p-2 text-black overflow-y-auto"
@@ -133,13 +146,14 @@ const DiskContent = () => {
                 <button 
                     onClick={handleClickPasteAction}
                     className="btn-context"
-                    disabled={elementActionInfo?.fileId === ""}
+                    disabled={elementActionInfo?.action === ""}
                 >
                     Pegar
                 </button>
                 <button 
                     className="btn-context"
                     disabled={selectedFileId === ""}
+                    onClick={handleClickDeleteAction}
                 >
                     Eliminar
                 </button>
