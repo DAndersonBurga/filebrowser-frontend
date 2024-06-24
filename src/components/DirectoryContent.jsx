@@ -6,7 +6,7 @@ import Table from "./Table"
 import CustomModal from "./CustomModal"
 import FileForm from "./FileForm"
 import useGlobalContext from "../hooks/useGlobalContext"
-import { copyFile, getFilesFromDirectory } from "../helpers/files"
+import { copyFile, cutFile, deleteFile, getFilesFromDirectory } from "../helpers/files"
 import { FILE_ACTION } from "../constants/file"
 import { toast } from "react-toastify"
 
@@ -99,7 +99,16 @@ const DirectoryContent = () => {
                 return;
             }
 
+            if(destinationDiskId === sourceDiskId && 
+                destinationParentId === sourceParentId) {
+                return;
+           }
+
             // Implement cut action
+            const cutResponse = await cutFile(elementActionInfo);
+            setElementActionInfo({})
+            setSelectedFileId("")
+            toast.success(cutResponse.data.message)
         }
 
         const filesResponse = await getFilesFromDirectory(diskId, directoryId)

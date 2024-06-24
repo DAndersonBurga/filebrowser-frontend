@@ -8,7 +8,7 @@ import FileForm from "./FileForm"
 import CustomModal from "./CustomModal"
 import Table from "./Table"
 import { FILE_ACTION } from "../constants/file"
-import { copyFile, deleteFile } from "../helpers/files"
+import { copyFile, cutFile, deleteFile } from "../helpers/files"
 import { toast } from "react-toastify"
 
 const DiskContent = () => {
@@ -90,7 +90,16 @@ const DiskContent = () => {
                 return;
             }
 
-           // Implement cut action
+           if(destinationDiskId === sourceDiskId && 
+                destinationParentId === sourceParentId) {
+                return;
+           }
+
+            // Implement cut action
+            const cutResponse = await cutFile(elementActionInfo);
+            setElementActionInfo({})
+            setSelectedFileId("")
+            toast.success(cutResponse.data.message)
         }
 
         const filesResponse = await getFilesFromDisk(diskId)
