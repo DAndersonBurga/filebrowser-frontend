@@ -46,6 +46,8 @@ const useStore = create(devtools(
         setSelectedFileId: (selectedFileId) => set({ selectedFileId }),
         elementActionInfo: {},
         setElementActionInfo: (elementActionInfo) => set({ elementActionInfo }),
+        clientWs: {},
+        setClientWs: (clientWs) => set({ clientWs }) 
     }),
         {
             name: "virtual-file-system"
