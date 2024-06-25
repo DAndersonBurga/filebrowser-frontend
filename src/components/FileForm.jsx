@@ -4,19 +4,22 @@ import { useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
 
 import { FILE_TYPE } from "../constants/file"
-import { createDirectory, createTxtFile, getFilesFromDirectory } from "../helpers/files"
+import { createDirectory, createTxtFile, editFile, getFilesFromDirectory } from "../helpers/files"
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "../hooks/useGlobalContext"
 
 const FileForm = ({ handleClose }) => {
 
   const { store } = useGlobalContext()
-  const { setFiles } = store
+  const { setFiles, currentEditingFile } = store
 
   const { diskId, directoryId } = useParams()
   const { handleSubmit, register, watch, unregister } = useForm({
     defaultValues: {
-      fileType: FILE_TYPE.TXT
+      fileType: currentEditingFile?.fileType || FILE_TYPE.TXT_FILE,
+      name: currentEditingFile?.name || "",
+      description: currentEditingFile?.description || "",
+      content: currentEditingFile?.content || ""
     }
   })
 
@@ -31,13 +34,22 @@ const FileForm = ({ handleClose }) => {
     let responseData;
 
     try {
-      if(directoryId === undefined || directoryId === null) {
-        responseData = await handleFileCreation(data, diskId, diskId)
-  
+
+      // Logic to edit file
+      if(currentEditingFile?.id) {
+        responseData = await editFile(data, diskId, currentEditingFile.id)
       } else {
-        responseData = await handleFileCreation(data, diskId, directoryId)
+
+        // Logic to create file
+        if(!directoryId) {
+          responseData = await creationFile(data, diskId, diskId)
+    
+        } else {
+          responseData = await creationFile(data, diskId, directoryId)
+        }
       }
 
+      // get files from disk or from directory after create or edit file
       if(responseData) {
         await getFilesFromDiskOrFromDirectory()
 
@@ -49,7 +61,7 @@ const FileForm = ({ handleClose }) => {
     }
   }
 
-  const handleFileCreation = async (data, diskId, directoryId) => {
+  const creationFile = async (data, diskId, directoryId) => {
     let responseData;
     if (data.fileType === FILE_TYPE.TXT) {
       responseData = await createTxtFile(data, diskId, directoryId);
@@ -61,7 +73,7 @@ const FileForm = ({ handleClose }) => {
   }
 
   const getFilesFromDiskOrFromDirectory = async () => {
-    if(directoryId === undefined || directoryId === null) {
+    if(!directoryId) {
       const { data } = await getFilesFromDisk(diskId)
       setFiles(data)
     } else {
@@ -81,7 +93,7 @@ const FileForm = ({ handleClose }) => {
       className="bg-white p-2 w-96"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="text-blue-500 text-center text-2xl font-bold mb-4">Nuevo Archivo</h2>
+      <h2 className="text-blue-500 text-center text-2xl font-bold mb-4">{currentEditingFile?.id ? "Editar" : "Nuevo"} Archivo</h2>
 
       <div className="flex gap-2 items-center mb-2">
         <label className="w-20" htmlFor="name">Nombre: </label>
@@ -102,6 +114,7 @@ const FileForm = ({ handleClose }) => {
           className="p-1 w-full border rounded-md border-gray-700 outline-none"
           id="fileType"
           name="fileType"
+          disabled={currentEditingFile?.id}
           {...register("fileType")}
         >
 
@@ -140,7 +153,7 @@ const FileForm = ({ handleClose }) => {
       <div className="flex justify-end">
         <input
           className="px-6 py-2 font-bold rounded-md text-white cursor-pointer bg-blue-500 hover:bg-blue-700 transition-all ease-in-out duration-300"
-          type="submit" value="Crear"
+          type="submit" value={currentEditingFile?.id ? "Actualizar" : "Crear"}
         />
       </div>
     </form>

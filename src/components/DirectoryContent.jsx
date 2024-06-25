@@ -6,13 +6,14 @@ import Table from "./Table"
 import CustomModal from "./CustomModal"
 import FileForm from "./FileForm"
 import useGlobalContext from "../hooks/useGlobalContext"
-import { copyFile, cutFile, deleteFile, getFilesFromDirectory } from "../helpers/files"
-import { FILE_ACTION } from "../constants/file"
-import { toast } from "react-toastify"
+import { getFilesFromDirectory } from "../helpers/files"
+import useFileHandler from "../hooks/useFileHandler"
 
 const DirectoryContent = () => {
     const { store } = useGlobalContext()
-    const { files, setFiles, selectedFileId, setSelectedFileId, elementActionInfo,  setElementActionInfo} = store
+    const { files, setFiles, selectedFileId, elementActionInfo, setCurrentEditingFile } = store
+
+    const { handleClickCutAction, handleClickCopyAction, handleClickPasteAction, handleClickDeleteAction } = useFileHandler();
     
     const { diskId, directoryId } = useParams()
     const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 })
@@ -50,85 +51,11 @@ const DirectoryContent = () => {
         })
     }
 
-    const handleClickCutAction = () => {
-        setElementActionInfo({
-            action: FILE_ACTION.CUT,
-            sourceDiskId: diskId,
-            sourceParentId: directoryId,
-            fileId: selectedFileId,
-            destinationDiskId: "",
-            destinationParentId: ""
-        })
-    }
-
-    const handleClickCopyAction = () => {
-
-        setElementActionInfo({
-            action: FILE_ACTION.COPY,
-            sourceDiskId: diskId,
-            sourceParentId: directoryId,
-            fileId: selectedFileId,
-            destinationDiskId: "",
-            destinationParentId: ""
-        })
-    }
-
-    const handleClickPasteAction = async () => {
-        
-
-        elementActionInfo.destinationDiskId = diskId
-        elementActionInfo.destinationParentId = directoryId
-
-        const { sourceDiskId, sourceParentId, destinationDiskId, destinationParentId, action } = elementActionInfo
-
-        if(Object.values(elementActionInfo).includes("")) {
-            return;
-        }
-
-        if(action === FILE_ACTION.COPY) {
-
-            const copyResponse = await copyFile(elementActionInfo);
-            setElementActionInfo({})
-            setSelectedFileId("")
-            toast.success(copyResponse.data.message)
-
-        } else {
-            
-            if(destinationDiskId === sourceDiskId && 
-                destinationParentId === sourceParentId) {
-                return;
-            }
-
-            if(destinationDiskId === sourceDiskId && 
-                destinationParentId === sourceParentId) {
-                return;
-           }
-
-            // Implement cut action
-            const cutResponse = await cutFile(elementActionInfo);
-            setElementActionInfo({})
-            setSelectedFileId("")
-            toast.success(cutResponse.data.message)
-        }
-
-        const filesResponse = await getFilesFromDirectory(diskId, directoryId)
-        setFiles(filesResponse.data)
-    }
-
-    const handleClickDeleteAction = async () => {
-        try {
-            await deleteFile(diskId, directoryId, selectedFileId)
-            toast.success("Archivo eliminado correctamente")
-
-            const filesResponse = await getFilesFromDirectory(diskId, directoryId)
-            setFiles(filesResponse.data)
-        } catch (error) {
-            toast.error(error.response.data.message)
-        }
-    }
-
     const open = () => setOpenModal(true)
-    const handleClose = () => setOpenModal(false)
+    const handleClose = () => {
+        setCurrentEditingFile({})
+        setOpenModal(false)
+    }
 
   return (
     <section 
@@ -182,6 +109,7 @@ const DirectoryContent = () => {
 
         <Table
           files={files}
+          openModalFileForm={open}
         />
 
         <CustomModal

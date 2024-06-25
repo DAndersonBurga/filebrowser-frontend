@@ -42,6 +42,8 @@ const useStore = create(devtools(
         pushToStackPath: pushToStackPath(set),
         popFromStackPath: popFromStackPath(set),
         peekFromStackPath: peekFromStackPath(get),
+        currentEditingFile: {},
+        setCurrentEditingFile: (currentEditingFile) => set({ currentEditingFile }),
         selectedFileId: "",
         setSelectedFileId: (selectedFileId) => set({ selectedFileId }),
         elementActionInfo: {},

@@ -3,7 +3,7 @@ import BackIcon from "../icons/other/BackIcon"
 import useGlobalContext from "../hooks/useGlobalContext"
 import File from "./File"
 
-const Table = ({ files }) => {
+const Table = ({ files, openModalFileForm }) => {
 
     const { store } = useGlobalContext()
     const { popFromStackPath } = store;
@@ -59,6 +59,7 @@ const Table = ({ files }) => {
                         <File 
                             key={file.id}
                             file={file}
+                            openModalFileForm={openModalFileForm}
                         />
                     ))}
 

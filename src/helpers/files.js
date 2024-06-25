@@ -36,9 +36,7 @@ const copyFile = async (data) => {
         destinationParentId: data.destinationParentId
     }
 
-    const response = await apiFileBrowser.post(`/file/copy`, newData)
-
-    return response;
+    return await apiFileBrowser.post(`/file/copy`, newData)
 }
 
 const cutFile = async (data) => {
@@ -50,9 +48,11 @@ const cutFile = async (data) => {
         destinationParentId: data.destinationParentId
     }
 
-    const response = await apiFileBrowser.post(`/file/cut`, newData)
+    return await apiFileBrowser.post(`/file/cut`, newData)
+}
 
-    return response;
+const editFile = async (data, diskId, fileId) => {
+    return await apiFileBrowser.put(`/file/edit/${diskId}/${fileId}`, data) 
 }
 
 export {
@@ -61,5 +61,6 @@ export {
     createDirectory,
     copyFile,
     cutFile,
-    deleteFile
+    deleteFile,
+    editFile
 }
