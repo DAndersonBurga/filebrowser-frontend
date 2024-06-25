@@ -3,12 +3,12 @@ import { useForm } from "react-hook-form";
 import { createDisk, getAllDisks } from "../helpers/disks";
 import useGlobalContext from "../hooks/useGlobalContext";
 
-const VirtualDiskForm = ({ handleClose }) => {
+const VirtualDiskForm = () => {
 
     const { handleSubmit, register } = useForm()
 
     const { store } = useGlobalContext()
-    const { setDisks } = store
+    const { setDisks, closeModal } = store
 
     const onSubmit = async (data) => {
         if(data.label === "" || data.name === "") {
@@ -30,7 +30,7 @@ const VirtualDiskForm = ({ handleClose }) => {
           Object.values(errors).map(error => toast.error(error))
         }
 
-        handleClose()
+        closeModal()
     }
 
     return (

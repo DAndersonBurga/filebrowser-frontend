@@ -1,4 +1,5 @@
 import { Box, Modal } from "@mui/material";
+import useGlobalContext from "../hooks/useGlobalContext";
 
 const style = {
     position: 'absolute',
@@ -10,13 +11,16 @@ const style = {
     p: 4,
 };
 
-const CustomModal = ({ children, open, handleClose }) => {
+const CustomModal = ({ children }) => {
+
+    const { store } = useGlobalContext();
+    const { modalIsOpen, closeModal } = store;
 
 
     return (
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={modalIsOpen}
+        onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

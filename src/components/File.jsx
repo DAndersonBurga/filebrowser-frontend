@@ -6,10 +6,10 @@ import FolderIcon from "../icons/files/FolderIcon";
 import { formatDate } from "../helpers";
 import useFileHandler from "../hooks/useFileHandler";
 
-const File = ({ file, openModalFileForm }) => {
+const File = ({ file }) => {
 
     const { store } = useGlobalContext()
-    const { pushToStackPath, selectedFileId, setSelectedFileId, setCurrentEditingFile } = store;
+    const { pushToStackPath, selectedFileId, setSelectedFileId, setCurrentEditingFile, openModal } = store;
     const { handleClickDeleteAction } = useFileHandler();
 
     const { diskId } = useParams();
@@ -37,12 +37,7 @@ const File = ({ file, openModalFileForm }) => {
             fileType: file.fileType  
         })
 
-        openModalFileForm()
-    }
-
-    const handleClickDelete = async () => {
-        setSelectedFileId(file.id)
-        await handleClickDeleteAction()
+        openModal()
     } 
 
     return (
@@ -90,8 +85,20 @@ const File = ({ file, openModalFileForm }) => {
                 {file?.lastModifiedAt ? formatDate(file.lastModifiedAt) : ""}
             </td>
             <td className="flex items-center px-6 py-4">
-                <button onClick={handleClickEdit} className="font-medium text-blue-600 hover:underline">Edit</button>
-                <button onClick={handleClickDelete} className="font-medium text-red-600 hover:underline ms-3">Remove</button>
+                <button 
+                    onClick={handleClickEdit} 
+                    className="font-medium text-blue-600 hover:underline"
+                >
+                    Edit
+                </button>
+
+                <button 
+                    onClick={handleClickDeleteAction} 
+                    className="font-medium text-red-600 hover:underline ms-3 disabled:opacity-50"
+                    disabled={selectedFileId === ""}
+                >
+                    Remove
+                </button>
             </td>
         </tr>
     )

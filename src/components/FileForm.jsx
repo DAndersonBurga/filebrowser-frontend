@@ -8,12 +8,13 @@ import { createDirectory, createTxtFile, editFile, getFilesFromDirectory } from 
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "../hooks/useGlobalContext"
 
-const FileForm = ({ handleClose }) => {
+const FileForm = () => {
 
   const { store } = useGlobalContext()
-  const { setFiles, currentEditingFile } = store
+  const { setFiles, currentEditingFile, closeModal } = store
 
   const { diskId, directoryId } = useParams()
+  
   const { handleSubmit, register, watch, unregister } = useForm({
     defaultValues: {
       fileType: currentEditingFile?.fileType || FILE_TYPE.TXT_FILE,
@@ -54,7 +55,7 @@ const FileForm = ({ handleClose }) => {
         await getFilesFromDiskOrFromDirectory()
 
         toast.success(responseData.message)
-        handleClose()
+        closeModal()
       }
     } catch (error) {
       toast.error(error.response.data.message)

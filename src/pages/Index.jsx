@@ -11,19 +11,14 @@ import ContextMenu from "../components/ContextMenu";
 const Index = () => {
 
   const { store } = useGlobalContext()
-  const { disks, setDisks, pushToStackPath, setStackPath } = store
-
-  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 })
-  const [open, setOpen] = useState(false)
+  const { disks, setDisks, pushToStackPath, setStackPath, contextMenu, setContextMenu, openModal } = store
 
   const [diskId, setDiskId] = useState("")
 
   const handleOpen = () => {
-    setContextMenu({ visible: false, x: 0, y: 0 })
     setDiskId("")
-    setOpen(true)
+    openModal()
   }
-  const handleClose = () => setOpen(false)
 
   const handleOnAuxClick = (e) => {
     e.preventDefault()
@@ -113,13 +108,8 @@ const Index = () => {
         </button>
       </div>
 
-      <CustomModal
-        open={open}
-        handleClose={handleClose}
-      >
-        <VirtualDiskForm 
-          handleClose={handleClose}
-        />
+      <CustomModal >
+        <VirtualDiskForm />
       </CustomModal>
 
     </section>

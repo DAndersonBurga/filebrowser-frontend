@@ -49,7 +49,17 @@ const useStore = create(devtools(
         elementActionInfo: {},
         setElementActionInfo: (elementActionInfo) => set({ elementActionInfo }),
         clientWs: {},
-        setClientWs: (clientWs) => set({ clientWs }) 
+        setClientWs: (clientWs) => set({ clientWs }),
+        modalIsOpen: false,
+        openModal: () => set({ modalIsOpen: true }),
+        closeModal: () => {
+            set({ 
+                currentEditingFile: {},
+                modalIsOpen: false
+            })
+        },
+        contextMenu: { visible: false, x: 0, y: 0 },
+        setContextMenu: (contextMenu) => set({ contextMenu})
     }),
         {
             name: "virtual-file-system"

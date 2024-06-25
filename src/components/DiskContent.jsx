@@ -11,13 +11,11 @@ import useFileHandler from "../hooks/useFileHandler"
 
 const DiskContent = () => {
     const { store } = useGlobalContext()
-    const { files, setFiles, selectedFileId, elementActionInfo, setCurrentEditingFile } = store
+    const { files, setFiles, selectedFileId, elementActionInfo, contextMenu, setContextMenu, openModal } = store
 
     const { handleClickCutAction, handleClickCopyAction, handleClickPasteAction, handleClickDeleteAction } = useFileHandler();
     
     const { diskId } = useParams()
-    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 })
-    const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {
         
@@ -39,12 +37,6 @@ const DiskContent = () => {
         })
     }
 
-    const open = () => setOpenModal(true)
-    const handleClose = () => {
-        setCurrentEditingFile({})
-        setOpenModal(false)
-    }
-
   return (
     <section 
         className="h-full bg-slate-100 p-2 text-black overflow-y-auto"
@@ -55,13 +47,10 @@ const DiskContent = () => {
     >
 
         {contextMenu?.visible && (
-            <ContextMenu
-                y={contextMenu.y}
-                x={contextMenu.x}
-            >
+            <ContextMenu>
                 <button 
                     className="btn-context"
-                    onClick={open}
+                    onClick={openModal}
                 >
                     Nuevo
                 </button>
@@ -97,17 +86,11 @@ const DiskContent = () => {
         )}
 
         <Table
-            openModalFileForm={open}
             files={files}
         />
 
-        <CustomModal
-            open={openModal}
-            handleClose={handleClose}
-        >
-            <FileForm 
-                handleClose={handleClose}
-            />
+        <CustomModal>
+            <FileForm />
         </CustomModal>
     </section>
   )

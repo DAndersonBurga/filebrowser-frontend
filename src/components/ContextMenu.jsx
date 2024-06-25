@@ -1,7 +1,10 @@
-const ContextMenu = ({ x, y, children }) => {
+import useGlobalContext from "../hooks/useGlobalContext";
+
+const ContextMenu = ({ children }) => {
 
     const threshold = window.innerHeight * 0.75;
-    
+    const { store } = useGlobalContext();
+    const { contextMenu: {x, y} } = store
 
     return (
         <div

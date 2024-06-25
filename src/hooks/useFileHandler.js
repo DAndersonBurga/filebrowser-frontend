@@ -46,31 +46,35 @@ const useFileHandler = () => {
             return;
         }
     
-        if(action === FILE_ACTION.COPY) {
-            const copyResponse = await copyFile(elementActionInfo);
-            setElementActionInfo({})
-            setSelectedFileId("")
-            toast.success(copyResponse.data.message)
-    
-        } else {
-            
-            if(destinationDiskId === sourceDiskId && 
-                destinationParentId === sourceParentId) {
-                return;
+        try {
+            if(action === FILE_ACTION.COPY) {
+                const copyResponse = await copyFile(elementActionInfo);
+                setElementActionInfo({})
+                setSelectedFileId("")
+                toast.success(copyResponse.data.message)
+        
+            } else {
+                
+                if(destinationDiskId === sourceDiskId && 
+                    destinationParentId === sourceParentId) {
+                    return;
+                }
+        
+               if(destinationDiskId === sourceDiskId && 
+                    destinationParentId === sourceParentId) {
+                    return;
+               }
+        
+                const cutResponse = await cutFile(elementActionInfo);
+                setElementActionInfo({})
+                setSelectedFileId("")
+                toast.success(cutResponse.data.message)
             }
-    
-           if(destinationDiskId === sourceDiskId && 
-                destinationParentId === sourceParentId) {
-                return;
-           }
-    
-            const cutResponse = await cutFile(elementActionInfo);
-            setElementActionInfo({})
-            setSelectedFileId("")
-            toast.success(cutResponse.data.message)
+        
+            await getFiles();
+        } catch (error) {
+            toast.error(error.response.data.message)
         }
-    
-        await getFiles();
     }
     
     const handleClickDeleteAction = async () => {
@@ -81,6 +85,8 @@ const useFileHandler = () => {
                 directoryId ? directoryId : diskId, 
                 selectedFileId
             )
+            setSelectedFileId("")
+            setElementActionInfo({})
             toast.success("Archivo eliminado correctamente")
     
             await getFiles()
