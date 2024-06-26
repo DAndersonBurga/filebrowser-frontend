@@ -1,53 +1,55 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-import ContextMenu from "./ContextMenu"
-import Table from "./Table"
-import CustomModal from "./CustomModal"
-import FileForm from "./FileForm"
 import useGlobalContext from "../hooks/useGlobalContext"
+import ContextMenu from "./ContextMenu"
 import { getFilesFromDirectory } from "../helpers/files"
-import useFileHandler from "../hooks/useFileHandler"
+import FileForm from "./FileForm"
+import CustomModal from "./CustomModal"
+import Table from "./Table"
+import useContextMenu from "../hooks/useContextMenu"
+import ContextMenuOptions from "./ContextMenuOptions"
+import { getFilesFromDisk } from "../helpers/disks"
+import FileView from "./FileView"
+import FileProperties from "./FileProperties"
 
 const DirectoryContent = () => {
     const { store } = useGlobalContext()
-    const { files, setFiles, selectedFileId, elementActionInfo, openModal, setContextMenu, contextMenu } = store
+    const { 
+        files, setFiles, setContextMenu, contextMenu, modalIsOpen, closeModal,
+         viewFileModalIsOpen, setViewFileModalIsOpen, propertiesFileModalIsOpen, setPropertiesFileModalIsOpen
+    } = store
 
-    const { handleClickCutAction, handleClickCopyAction, handleClickPasteAction, handleClickDeleteAction } = useFileHandler();
-    
+    const { handleOnAuxClick } = useContextMenu()
+            
     const { diskId, directoryId } = useParams()
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        const getFiles = async () => {
+    const getFiles = async () => {
+        if(directoryId) {
             const { data } = await getFilesFromDirectory(diskId, directoryId)
-            setLoading(false)
+            setFiles(data)
+        } else {
+            const { data } = await getFilesFromDisk(diskId)
             setFiles(data)
         }
+    }
 
-        getFiles()
+    useEffect(() => {
+        const fetchData = async () => {
+            await getFiles()
+            setLoading(false)
+        }
+
+        fetchData()
     }, [])
 
     useEffect(() => {
-        const getFiles = async () => {
-            const { data } = await getFilesFromDirectory(diskId, directoryId)
-            setFiles(data)
-        }
-
         if(!loading) {
-            getFiles()
+            getFiles();
         }
     }, [directoryId])
 
-    const handleOnAuxClick = (e) => {
-        e.preventDefault()
-
-        setContextMenu({
-          visible: !contextMenu?.visible,
-          x: e.clientX,
-          y: e.clientY
-        })
-    }
 
   return (
     <section 
@@ -62,40 +64,7 @@ const DirectoryContent = () => {
                 y={contextMenu.y}
                 x={contextMenu.x}
             >
-                <button 
-                    className="btn-context"
-                    onClick={openModal}
-                >
-                    Nuevo
-                </button>
-                <button
-                    onClick={handleClickCutAction}
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                >
-                    Cortar
-                </button>
-                <button 
-                    onClick={handleClickCopyAction}
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                >
-                    Copiar
-                </button>
-                <button 
-                    onClick={handleClickPasteAction}
-                    className="btn-context"
-                    disabled={elementActionInfo?.fileId === ""}
-                >
-                    Pegar
-                </button>
-                <button 
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                    onClick={handleClickDeleteAction}
-                >
-                    Eliminar
-                </button>
+                <ContextMenuOptions />
             </ContextMenu>
         )}
 
@@ -103,8 +72,25 @@ const DirectoryContent = () => {
           files={files}
         />
 
-        <CustomModal>
+        <CustomModal
+            modalIsOpen={modalIsOpen}
+            closeModal={closeModal}
+        >
             <FileForm />
+        </CustomModal>
+
+        <CustomModal
+            modalIsOpen={viewFileModalIsOpen}
+            closeModal={() => setViewFileModalIsOpen(false)}
+        >
+            <FileView />
+        </CustomModal>
+
+        <CustomModal
+            modalIsOpen={propertiesFileModalIsOpen}
+            closeModal={() => setPropertiesFileModalIsOpen(false)}
+        >
+            <FileProperties />
         </CustomModal>
     </section>
   )

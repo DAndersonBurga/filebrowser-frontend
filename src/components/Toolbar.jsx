@@ -14,14 +14,15 @@ const Toolbar = () => {
     const { store } = useGlobalContext();
     const { selectedFileId, elementActionInfo } = store;
 
-    const { handleClickCutAction, handleClickCopyAction, 
-        handleClickPasteAction, handleClickDeleteAction } = useFileHandler();
+    const { handleClickCutAction, handleClickCopyAction, handleClickPasteAction, 
+        handleClickDeleteAction, handleClickEditAction, handleClickShowPropertiesAction } = useFileHandler();
 
   return (
     <section className="w-full bg-gray-700 h-28 flex items-center px-4 py-2 text-white gap-6">
         <button 
             className="flex flex-col items-center hover:opacity-80 disabled:opacity-50"
             disabled={selectedFileId === ""}
+            onClick={handleClickShowPropertiesAction}
         >
             <FilePropertiesIcon className="size-12 text-indigo-400" />
             <p>Propiedades</p>
@@ -57,6 +58,7 @@ const Toolbar = () => {
         <button 
             className="flex flex-col items-center hover:opacity-80 disabled:opacity-50"
             disabled={selectedFileId === ""}
+            onClick={handleClickEditAction}
         >
             <FileEditIcon className="size-12 text-sky-300" />
             <p>Editar</p>

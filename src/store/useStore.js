@@ -37,19 +37,26 @@ const useStore = create(devtools(
         setDisks: (disks) => set({ disks }),
         files: [],
         setFiles: (files) => set({ files }),
+
         stackPath: [],
         setStackPath: (stackPath) => set({ stackPath }),
+
         pushToStackPath: pushToStackPath(set),
         popFromStackPath: popFromStackPath(set),
         peekFromStackPath: peekFromStackPath(get),
+
         currentEditingFile: {},
         setCurrentEditingFile: (currentEditingFile) => set({ currentEditingFile }),
+
         selectedFileId: "",
         setSelectedFileId: (selectedFileId) => set({ selectedFileId }),
+
         elementActionInfo: {},
         setElementActionInfo: (elementActionInfo) => set({ elementActionInfo }),
+
         clientWs: {},
         setClientWs: (clientWs) => set({ clientWs }),
+
         modalIsOpen: false,
         openModal: () => set({ modalIsOpen: true }),
         closeModal: () => {
@@ -58,8 +65,14 @@ const useStore = create(devtools(
                 modalIsOpen: false
             })
         },
+        viewFileModalIsOpen: false,
+        setViewFileModalIsOpen: (viewFileModalIsOpen) => set({ viewFileModalIsOpen }),
+        propertiesFileModalIsOpen: false,
+        setPropertiesFileModalIsOpen: (propertiesFileModalIsOpen) => set({ propertiesFileModalIsOpen }),
+
         contextMenu: { visible: false, x: 0, y: 0 },
         setContextMenu: (contextMenu) => set({ contextMenu})
+
     }),
         {
             name: "virtual-file-system"

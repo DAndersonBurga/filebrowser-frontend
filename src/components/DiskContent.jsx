@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 import useGlobalContext from "../hooks/useGlobalContext"
@@ -7,14 +7,18 @@ import { getFilesFromDisk } from "../helpers/disks"
 import FileForm from "./FileForm"
 import CustomModal from "./CustomModal"
 import Table from "./Table"
-import useFileHandler from "../hooks/useFileHandler"
+import useContextMenu from "../hooks/useContextMenu"
+import ContextMenuOptions from "./ContextMenuOptions"
 
 const DiskContent = () => {
     const { store } = useGlobalContext()
-    const { files, setFiles, selectedFileId, elementActionInfo, contextMenu, setContextMenu, openModal } = store
-
-    const { handleClickCutAction, handleClickCopyAction, handleClickPasteAction, handleClickDeleteAction } = useFileHandler();
+    const { 
+        files, setFiles, contextMenu, 
+        setContextMenu, modalIsOpen, closeModal 
+    } = store
     
+    const { handleOnAuxClick } = useContextMenu()
+
     const { diskId } = useParams()
 
     useEffect(() => {
@@ -27,16 +31,6 @@ const DiskContent = () => {
         getFiles()
     }, [])
 
-    const handleOnAuxClick = (e) => {
-        e.preventDefault()
-    
-        setContextMenu({
-          visible: !contextMenu?.visible,
-          x: e.clientX,
-          y: e.clientY
-        })
-    }
-
   return (
     <section 
         className="h-full bg-slate-100 p-2 text-black overflow-y-auto"
@@ -48,40 +42,7 @@ const DiskContent = () => {
 
         {contextMenu?.visible && (
             <ContextMenu>
-                <button 
-                    className="btn-context"
-                    onClick={openModal}
-                >
-                    Nuevo
-                </button>
-                <button 
-                    onClick={handleClickCutAction}
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                >
-                    Cortar
-                </button>
-                <button 
-                    onClick={handleClickCopyAction}
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                >
-                    Copiar
-                </button>
-                <button 
-                    onClick={handleClickPasteAction}
-                    className="btn-context"
-                    disabled={elementActionInfo?.action === ""}
-                >
-                    Pegar
-                </button>
-                <button 
-                    className="btn-context"
-                    disabled={selectedFileId === ""}
-                    onClick={handleClickDeleteAction}
-                >
-                    Eliminar
-                </button>
+                <ContextMenuOptions />
             </ContextMenu>
         )}
 
@@ -89,7 +50,10 @@ const DiskContent = () => {
             files={files}
         />
 
-        <CustomModal>
+        <CustomModal
+            modalIsOpen={modalIsOpen}
+            closeModal={closeModal}
+        >
             <FileForm />
         </CustomModal>
     </section>

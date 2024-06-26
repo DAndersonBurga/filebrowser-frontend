@@ -5,7 +5,6 @@ import MainLayout from "./layout/MainLayout"
 import Index from "./pages/Index"
 import { GlobalContextProvider } from "./context/GlobalContext";
 import DirectoryContent from "./components/DirectoryContent";
-import DiskContent from "./components/DiskContent";
 
 function App() {
 
@@ -19,7 +18,7 @@ function App() {
             <Route index element={<Index />} />
 
             <Route path=":diskId">
-              <Route index element={<DiskContent />} />
+              <Route index element={<DirectoryContent />} />
               <Route path=":directoryId" element={<DirectoryContent />} />
             </Route>
           </Route>

@@ -7,13 +7,18 @@ import VirtualDiskForm from "../components/VirtualDiskForm";
 import useGlobalContext from "../hooks/useGlobalContext";
 import { getAllDisks } from "../helpers/disks";
 import ContextMenu from "../components/ContextMenu";
+import FileProperties from "../components/FileProperties";
+import useFileHandler from "../hooks/useFileHandler";
 
 const Index = () => {
 
   const { store } = useGlobalContext()
-  const { disks, setDisks, pushToStackPath, setStackPath, contextMenu, setContextMenu, openModal } = store
+  const { disks, setDisks, pushToStackPath, setStackPath, contextMenu, setContextMenu, 
+    openModal, modalIsOpen, closeModal, propertiesFileModalIsOpen, setPropertiesFileModalIsOpen, setSelectedFileId } = store
 
   const [diskId, setDiskId] = useState("")
+
+  const { handleClickShowPropertiesAction } = useFileHandler()
 
   const handleOpen = () => {
     setDiskId("")
@@ -43,6 +48,7 @@ const Index = () => {
 
   useEffect(() => {
     setStackPath([])
+    setSelectedFileId("")
 
     const fetchData = async () => {
       const { data } = await getAllDisks()
@@ -76,7 +82,12 @@ const Index = () => {
           </button>
 
           <button className={"btn-context"} disabled={diskId === ""}>Eliminar</button>
-          <button className={"btn-context"} disabled={diskId === ""}>Propiedades</button>
+          <button 
+            onClick={handleClickShowPropertiesAction}
+            className={"btn-context"} disabled={diskId === ""}
+          >
+            Propiedades
+          </button>
           <button className={"btn-context"} disabled={diskId === ""}>Editar</button>
         </ContextMenu>
       )}
@@ -108,10 +119,21 @@ const Index = () => {
         </button>
       </div>
 
-      <CustomModal >
+      <CustomModal 
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+      >
         <VirtualDiskForm />
       </CustomModal>
 
+      <CustomModal
+        modalIsOpen={propertiesFileModalIsOpen}
+        closeModal={() => setPropertiesFileModalIsOpen(false)}
+      >
+        <FileProperties 
+          disk={disks?.find(disk => disk.id === diskId)}
+        />
+      </CustomModal>
     </section>
   )
 }

@@ -11,11 +11,7 @@ const style = {
     p: 4,
 };
 
-const CustomModal = ({ children }) => {
-
-    const { store } = useGlobalContext();
-    const { modalIsOpen, closeModal } = store;
-
+const CustomModal = ({ modalIsOpen, closeModal, children }) => {
 
     return (
       <Modal

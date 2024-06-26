@@ -8,7 +8,11 @@ import { useParams } from "react-router-dom"
 const useFileHandler = () => {
 
     const { store } = useGlobalContext()
-    const { setElementActionInfo, elementActionInfo, setSelectedFileId, setFiles, selectedFileId } = store
+    const { 
+        setElementActionInfo, elementActionInfo, setSelectedFileId, 
+        setFiles, selectedFileId, openModal, setCurrentEditingFile, files, propertiesFileModalIsOpen, setPropertiesFileModalIsOpen
+    } = store
+    
     const { diskId, directoryId } = useParams()
 
     const handleClickCutAction = () => {
@@ -95,6 +99,25 @@ const useFileHandler = () => {
         }
     }
 
+    const handleClickEditAction = () => {
+        
+        const file = files?.find(f => f?.id === selectedFileId)
+
+        setCurrentEditingFile({
+            id: file.id,
+            name: file.name,
+            description: file.description,
+            content: file.content,
+            fileType: file.fileType  
+        })
+
+        openModal()
+    }
+
+    const handleClickShowPropertiesAction = () => {
+        setPropertiesFileModalIsOpen(true)
+    }
+
     const getFiles = async () => {
         let filesResponse;
 
@@ -111,7 +134,9 @@ const useFileHandler = () => {
         handleClickCutAction,
         handleClickCopyAction,
         handleClickPasteAction,
-        handleClickDeleteAction
+        handleClickDeleteAction,
+        handleClickEditAction,
+        handleClickShowPropertiesAction
     }
 }
 
