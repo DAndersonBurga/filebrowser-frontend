@@ -69,14 +69,14 @@ const File = ({ file }) => {
                 ) : (
                     <Link
                         onClick={() => pushToStackPath(file.path)}
-                        to={`/app/${diskId}/${file.id}`} className="flex gap-1 items-center hover:text-blue-600">
+                        to={`/app/${diskId ? diskId : file.diskId}/${file.id}`} className="flex gap-1 items-center hover:text-blue-600">
                         <FolderIcon className="w-6 h-6 text-blue-500" />
                         {file.name}
                     </Link>
                 )}
             </th>
             <td className="px-6 py-4">
-                {file.size}
+                {file.size} KB
             </td>
             <td className="px-6 py-4">
                 {formatDate(file.creationAt)}
@@ -93,7 +93,7 @@ const File = ({ file }) => {
                 </button>
 
                 <button 
-                    onClick={handleClickDeleteAction} 
+                    onClick={() => handleClickDeleteAction(file.diskId)} 
                     className="font-medium text-red-600 hover:underline ms-3 disabled:opacity-50"
                     disabled={selectedFileId === ""}
                 >

@@ -21,7 +21,7 @@ const ContextMenu = ({ children }) => {
                 boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
                 zIndex: 1000,
             }}
-            className="w-36"
+            className="w-44"
         >
             <ul
                 className="list-none p-0 m-0 flex flex-col items-start"

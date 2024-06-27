@@ -1,18 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import useGlobalContext from "../hooks/useGlobalContext";
 import SearchIcon from "../icons/search/SearchIcon";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getFilesFromDisk } from "../helpers/disks";
-import { getFilesFromDirectory } from "../helpers/files";
+import { findWithPath, getFilesFromDirectory } from "../helpers/files";
+import { toast } from "react-toastify";
 
 const NavigationPanel = () => {
 
   const { store } = useGlobalContext();
-  const { stackPath, peekFromStackPath, setFiles, clientWs } = store;
+  const { stackPath, peekFromStackPath, pushToStackPath, setFiles, clientWs } = store;
+  const navigate = useNavigate();
 
   const { diskId, directoryId } = useParams();
 
-  const path = useMemo(() => peekFromStackPath(), [stackPath])
+  const [directoryPath, setDirectoryPath] = useState("");
+
+  useEffect(() => {
+    setDirectoryPath(peekFromStackPath());
+  }, [stackPath])
 
   const handleChangeSearch = async (e) => {
     e.preventDefault();
@@ -40,17 +46,37 @@ const NavigationPanel = () => {
   }
 
   const handleChangePath = (e) => {
-    console.log(e.target.value);
+    setDirectoryPath(e.target.value);
   }
 
+  const handleSubmitPath = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await findWithPath(directoryPath);
+      pushToStackPath(directoryPath);
+      
+      if(!data.directoryId) {
+        navigate(`/app/${data.diskId}`);
+        return;
+      }
+
+      navigate(`/app/${data.diskId}/${data.directoryId}`);
+
+    } catch (error) {
+      toast.error("La ruta no existe");
+    }
+
+  }
 
   return (
     <nav className="w-full gap-2 h-12 bg-gray-800 flex items-center text-white px-2">
-        <form className="w-full">
+        <form className="w-full" onSubmit={handleSubmitPath}>
           <input
-            className="w-full p-1 rounded-md bg-transparent border border-white/60" 
+            className="w-full p-1 rounded-md bg-transparent border border-white/60"
+            name="path"
             type="text"
-            value={path}
+            value={directoryPath}
             onChange={handleChangePath}
           />
         </form>

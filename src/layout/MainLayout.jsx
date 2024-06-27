@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import DirectoryViewer from "../components/DirectoryViewer"
+import DirectoryTreeView from "../components/DirectoryTreeView"
 import NavigationPanel from "../components/NavigationPanel"
 import Toolbar from "../components/Toolbar"
 
@@ -10,7 +10,7 @@ const MainLayout = () => {
         <Toolbar />
 
         <div className="flex h-full">
-            <DirectoryViewer />
+            <DirectoryTreeView />
 
             <main className="w-10/12 flex flex-col">
                 <NavigationPanel />

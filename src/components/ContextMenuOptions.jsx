@@ -2,13 +2,16 @@ import { useMemo } from "react";
 import useFileHandler from "../hooks/useFileHandler";
 import useGlobalContext from "../hooks/useGlobalContext";
 import { FILE_TYPE } from "../constants/file";
+import { useParams } from "react-router-dom";
 
 const ContextMenuOptions = () => {
 
     const { store } = useGlobalContext()
     const { selectedFileId, elementActionInfo, openModal, files, setViewFileModalIsOpen } = store
 
-    const { handleClickCutAction, handleClickCopyAction, 
+    const { diskId, directoryId } = useParams();
+
+    const { handleClickCutAction, handleClickCopyAction, handleClickCreateQuickAccess,
         handleClickPasteAction, handleClickDeleteAction, handleClickShowPropertiesAction } = useFileHandler();
 
     const file = useMemo(() => files?.find(f => f?.id === selectedFileId), [selectedFileId]);
@@ -19,12 +22,15 @@ const ContextMenuOptions = () => {
 
     return (
         <>
-            <button
-                className="btn-context"
-                onClick={openModal}
-            >
-                Nuevo
-            </button>
+            {(diskId || directoryId) && (
+                <button
+                    className="btn-context"
+                    onClick={openModal}
+                >
+                    Nuevo
+                </button>
+            )}
+            
             {file?.fileType === FILE_TYPE.TXT && (
                 <button
                     className="btn-context"
@@ -34,36 +40,50 @@ const ContextMenuOptions = () => {
                 </button>
             )}
             <button
-                    className="btn-context"
-                    onClick={handleClickShowPropertiesAction}
-                >
+                className="btn-context"
+                disabled={selectedFileId === ""}
+                onClick={handleClickShowPropertiesAction}
+            >
                     Propiedades
+            </button>
+
+            {(diskId || directoryId) && (
+                <button
+                    className="btn-context"
+                    onClick={handleClickCreateQuickAccess}
+                >
+                    Crear acceso rápido
                 </button>
+            )}
+            
             <button
-                onClick={handleClickCutAction}
+                onClick={() => handleClickCutAction(file)}
                 className="btn-context"
                 disabled={selectedFileId === ""}
             >
                 Cortar
             </button>
             <button
-                onClick={handleClickCopyAction}
+                onClick={() => handleClickCopyAction(file)}
                 className="btn-context"
                 disabled={selectedFileId === ""}
             >
                 Copiar
             </button>
-            <button
-                onClick={handleClickPasteAction}
-                className="btn-context"
-                disabled={!elementActionInfo?.fileId}
-            >
-                Pegar
-            </button>
+            {(diskId || directoryId) && (
+                <button
+                    onClick={handleClickPasteAction}
+                    className="btn-context"
+                    disabled={!elementActionInfo?.fileId}
+                >
+                    Pegar
+                </button>
+            )}
+            
             <button
                 className="btn-context"
                 disabled={selectedFileId === ""}
-                onClick={handleClickDeleteAction}
+                onClick={() => handleClickDeleteAction(file)}
             >
                 Eliminar
             </button>

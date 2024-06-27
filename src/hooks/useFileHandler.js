@@ -4,52 +4,55 @@ import { copyFile, cutFile, deleteFile, getFilesFromDirectory } from "../helpers
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "./useGlobalContext"
 import { useParams } from "react-router-dom"
+import { createQuickAccess } from "../helpers/quickAccess"
 
 const useFileHandler = () => {
 
     const { store } = useGlobalContext()
     const { 
         setElementActionInfo, elementActionInfo, setSelectedFileId, 
-        setFiles, selectedFileId, openModal, setCurrentEditingFile, files, propertiesFileModalIsOpen, setPropertiesFileModalIsOpen
+        setFiles, selectedFileId, openModal, setCurrentEditingFile, files, setPropertiesFileModalIsOpen
     } = store
     
     const { diskId, directoryId } = useParams()
 
-    const handleClickCutAction = () => {
+    const handleClickCutAction = (file) => {
         
         setElementActionInfo({
             action: FILE_ACTION.CUT,
             sourceDiskId: diskId,
-            sourceParentId: directoryId ? directoryId : diskId,
+            sourceParentId: directoryId ? directoryId : file.parentId,
             fileId: selectedFileId,
             destinationDiskId: "",
             destinationParentId: ""
         })
     }
     
-    const handleClickCopyAction = () => {
+    const handleClickCopyAction = (file) => {
     
         setElementActionInfo({
             action: FILE_ACTION.COPY,
-            sourceDiskId: diskId,
-            sourceParentId: directoryId ? directoryId : diskId,
+            sourceDiskId: diskId ? diskId : file.diskId,
+            sourceParentId: directoryId ? directoryId : file.parentId,
             fileId: selectedFileId,
             destinationDiskId: "",
             destinationParentId: ""
         })
     }
     
-    const handleClickPasteAction = async () => {
+    const handleClickPasteAction = async (file) => {
+
+        console.log(file);
         
-        elementActionInfo.destinationDiskId = diskId
-        elementActionInfo.destinationParentId = directoryId ? directoryId : diskId
+        elementActionInfo.destinationDiskId = diskId ? diskId : file.diskId
+        elementActionInfo.destinationParentId = directoryId ? directoryId : (file?.parentId ? file.parentId : diskId)
     
         const { sourceDiskId, sourceParentId, destinationDiskId, destinationParentId, action } = elementActionInfo
     
         if(Object.values(elementActionInfo).includes("")) {
             return;
         }
-    
+
         try {
             if(action === FILE_ACTION.COPY) {
                 const copyResponse = await copyFile(elementActionInfo);
@@ -81,12 +84,12 @@ const useFileHandler = () => {
         }
     }
     
-    const handleClickDeleteAction = async () => {
+    const handleClickDeleteAction = async (file) => {
         try {
             
             await deleteFile(
-                diskId, 
-                directoryId ? directoryId : diskId, 
+                diskId ? diskId : file.diskId, 
+                directoryId ? directoryId : file.parentId, 
                 selectedFileId
             )
             setSelectedFileId("")
@@ -101,14 +104,14 @@ const useFileHandler = () => {
 
     const handleClickEditAction = () => {
         
-        const file = files?.find(f => f?.id === selectedFileId)
+        const fileFound = files?.find(f => f?.id === selectedFileId)
 
         setCurrentEditingFile({
-            id: file.id,
-            name: file.name,
-            description: file.description,
-            content: file.content,
-            fileType: file.fileType  
+            id: fileFound.id,
+            name: fileFound.name,
+            description: fileFound.description,
+            content: fileFound.content,
+            fileType: fileFound.fileType  
         })
 
         openModal()
@@ -116,6 +119,12 @@ const useFileHandler = () => {
 
     const handleClickShowPropertiesAction = () => {
         setPropertiesFileModalIsOpen(true)
+    }
+    
+    const handleClickCreateQuickAccess = async () => {
+        const { data } = await createQuickAccess(diskId, selectedFileId);
+
+        toast.success(data.message)
     }
 
     const getFiles = async () => {
@@ -136,7 +145,8 @@ const useFileHandler = () => {
         handleClickPasteAction,
         handleClickDeleteAction,
         handleClickEditAction,
-        handleClickShowPropertiesAction
+        handleClickShowPropertiesAction,
+        handleClickCreateQuickAccess
     }
 }
 

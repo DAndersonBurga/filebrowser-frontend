@@ -48,7 +48,6 @@ const Index = () => {
 
   useEffect(() => {
     setStackPath([])
-    setSelectedFileId("")
 
     const fetchData = async () => {
       const { data } = await getAllDisks()

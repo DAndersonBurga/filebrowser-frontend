@@ -5,9 +5,6 @@ import { formatDate } from "../helpers"
 const FileProperties = ({ disk }) => {
     const { store } = useGlobalContext()
     const { selectedFileId, files } = store
-  
-    console.log(disk);
-    console.log(files?.length);
 
     const file = useMemo(() => {
         if(disk) {
@@ -33,7 +30,7 @@ const FileProperties = ({ disk }) => {
               <span className="font-bold">Descripción:</span> {file?.description}
           </p>
           <p>
-              <span className="font-bold">Tamaño:</span> {file?.size}
+              <span className="font-bold">Tamaño:</span> {file?.size} KB
           </p>
           <p>
             <span className="font-bold">Tipo:</span> {file?.fileType}

@@ -1,19 +1,21 @@
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { toast } from "react-toastify"
 import { useForm } from "react-hook-form"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 
 import { FILE_TYPE } from "../constants/file"
 import { createDirectory, createTxtFile, editFile, getFilesFromDirectory } from "../helpers/files"
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "../hooks/useGlobalContext"
+import { getQuickAccess } from "../helpers/quickAccess"
 
 const FileForm = () => {
 
   const { store } = useGlobalContext()
-  const { setFiles, currentEditingFile, closeModal } = store
+  const { setFiles, currentEditingFile, closeModal, files } = store
 
   const { diskId, directoryId } = useParams()
+  const location = useLocation();
   
   const { handleSubmit, register, watch, unregister } = useForm({
     defaultValues: {
@@ -23,6 +25,8 @@ const FileForm = () => {
       content: currentEditingFile?.content || ""
     }
   })
+
+  const file = useMemo(() => files?.find(f => f.id === currentEditingFile?.id), [currentEditingFile])
 
   const watchFileType = watch("fileType")
 
@@ -38,7 +42,7 @@ const FileForm = () => {
 
       // Logic to edit file
       if(currentEditingFile?.id) {
-        responseData = await editFile(data, diskId, currentEditingFile.id)
+        responseData = await editFile(data, diskId ? diskId : file?.diskId, currentEditingFile.id)
       } else {
 
         // Logic to create file
@@ -51,12 +55,15 @@ const FileForm = () => {
       }
 
       // get files from disk or from directory after create or edit file
-      if(responseData) {
+      if(responseData && location.pathname !== "/app/quickAccess") {
         await getFilesFromDiskOrFromDirectory()
-
-        toast.success(responseData.message)
-        closeModal()
+      } else {
+        const responseQuickAccess = await getQuickAccess();     
+        setFiles(responseQuickAccess.data)
       }
+
+      toast.success(responseData.data.message)
+      closeModal()
     } catch (error) {
       toast.error(error.response.data.message)
     }

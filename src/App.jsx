@@ -5,6 +5,7 @@ import MainLayout from "./layout/MainLayout"
 import Index from "./pages/Index"
 import { GlobalContextProvider } from "./context/GlobalContext";
 import DirectoryContent from "./components/DirectoryContent";
+import QuickAccess from "./components/QuickAccess";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           
           <Route path="/app" element={<MainLayout />}>
             <Route index element={<Index />} />
+            <Route path="/app/quickAccess" element={<QuickAccess />}/>
 
             <Route path=":diskId">
               <Route index element={<DirectoryContent />} />

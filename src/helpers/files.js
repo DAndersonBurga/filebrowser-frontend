@@ -55,6 +55,10 @@ const editFile = async (data, diskId, fileId) => {
     return await apiFileBrowser.put(`/file/edit/${diskId}/${fileId}`, data) 
 }
 
+const findWithPath = async (path) => {
+    return await apiFileBrowser.get(`/file/path?path=${path}`);
+}
+
 export {
     getFilesFromDirectory,
     createTxtFile,
@@ -62,5 +66,6 @@ export {
     copyFile,
     cutFile,
     deleteFile,
-    editFile
+    editFile,
+    findWithPath
 }
