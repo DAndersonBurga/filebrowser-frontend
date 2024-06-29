@@ -4,7 +4,7 @@ import { copyFile, cutFile, deleteFile, getFilesFromDirectory } from "../helpers
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "./useGlobalContext"
 import { useParams } from "react-router-dom"
-import { createQuickAccess } from "../helpers/quickAccess"
+import { createQuickAccess, getQuickAccess } from "../helpers/quickAccess"
 
 const useFileHandler = () => {
 
@@ -84,7 +84,6 @@ const useFileHandler = () => {
     
     const handleClickDeleteAction = async (file) => {
         try {
-            
             await deleteFile(
                 diskId ? diskId : file.diskId, 
                 directoryId ? directoryId : (file?.parentId ? file.parentId : diskId), 
@@ -127,6 +126,12 @@ const useFileHandler = () => {
 
     const getFiles = async () => {
         let filesResponse;
+
+        if(!directoryId && !diskId) {
+            const { data } = await getQuickAccess();
+            setFiles(data)
+            return;
+        }
 
         if(directoryId) {
             filesResponse = await getFilesFromDirectory(diskId, directoryId)

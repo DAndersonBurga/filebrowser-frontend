@@ -17,7 +17,7 @@ import { exportFileSystem } from "../helpers/fileSystem"
 const Toolbar = () => {
 
     const { store } = useGlobalContext();
-    const { selectedFileId, elementActionInfo, files } = store;
+    const { selectedFileId, elementActionInfo, files, pushToStackPath } = store;
 
     const location = useLocation();
 
@@ -38,6 +38,10 @@ const Toolbar = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    const handleClickQuickAccess = () => {
+        pushToStackPath("/Acceso Rápido")
     }
 
     return (
@@ -104,7 +108,11 @@ const Toolbar = () => {
                     <HardDiskIcon className="size-12 text-zinc-300" />
                     <p>Discos</p>
                 </Link>
-                <Link to="/app/quickAccess" className="hover:opacity-80 flex flex-col items-center">
+                <Link 
+                    onClick={handleClickQuickAccess}
+                    to="/app/quickAccess" 
+                    className="hover:opacity-80 flex flex-col items-center"
+                >
                     <StarIcon className="size-12 text-yellow-500" />
                     <p>Acceso rápido</p>
                 </Link>

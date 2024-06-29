@@ -18,7 +18,7 @@ const DirectoryTreeView = () => {
   });
 
   const { store } = useGlobalContext();
-  const { files, disks, pushToStackPath } = store;
+  const { files, disks, pushToStackPath, fileSystemName } = store;
 
   useEffect(() => {
     const getTree = async () => {
@@ -68,6 +68,8 @@ const DirectoryTreeView = () => {
 
   return (
     <section className="h-full bg-gray-800 w-2/12 p-2 text-white overflow-auto">
+      <h2 className="text-xl mb-2 font-bold text-wrap">{fileSystemName}</h2>
+
       {data.length > 1 && (
         <>
           <button

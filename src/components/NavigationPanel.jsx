@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import useGlobalContext from "../hooks/useGlobalContext";
 import SearchIcon from "../icons/search/SearchIcon";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getFilesFromDisk } from "../helpers/disks";
 import { findWithPath, getFilesFromDirectory } from "../helpers/files";
 import { toast } from "react-toastify";
+import { getQuickAccess } from "../helpers/quickAccess";
 
 const NavigationPanel = () => {
 
   const { store } = useGlobalContext();
   const { stackPath, peekFromStackPath, pushToStackPath, setFiles, clientWs } = store;
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { diskId, directoryId } = useParams();
 
@@ -25,6 +27,13 @@ const NavigationPanel = () => {
     const query = e.target.value;    
 
     if(query === "") {
+
+      if(location.pathname === "/app/quickAccess") {
+        const { data } = await getQuickAccess();
+        setFiles(data);
+        return;
+      }
+
       if(!directoryId) {
         const response = await getFilesFromDisk(diskId);
         setFiles(response.data);
@@ -35,13 +44,22 @@ const NavigationPanel = () => {
       
       return;
     } else {
-      const payload = {
-        diskId,
-        parentId: directoryId ? directoryId : diskId,
-        query
+      
+      if(location.pathname !== "/app/quickAccess") {
+        const payload = {
+          diskId,
+          parentId: directoryId ? directoryId : diskId,
+          query
+        }
+  
+        clientWs.send("/app/search", {}, JSON.stringify(payload));
+      } else {
+        const payload = {query}
+
+        clientWs.send("/app/search/quickAccess", {}, JSON.stringify(payload));
+
       }
 
-      clientWs.send("/app/search", {}, JSON.stringify(payload));
     }
   }
 

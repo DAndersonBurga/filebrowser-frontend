@@ -93,7 +93,7 @@ const File = ({ file }) => {
                 </button>
 
                 <button 
-                    onClick={() => handleClickDeleteAction(file.diskId)} 
+                    onClick={() => handleClickDeleteAction(file)} 
                     className="font-medium text-red-600 hover:underline ms-3 disabled:opacity-50"
                     disabled={selectedFileId === ""}
                 >
