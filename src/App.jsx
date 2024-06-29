@@ -2,10 +2,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from "./layout/MainLayout"
-import Index from "./pages/Index"
+import VirtualDisksPage from "./pages/VirtualDisksPage"
 import { GlobalContextProvider } from "./context/GlobalContext";
-import DirectoryContent from "./components/DirectoryContent";
-import QuickAccess from "./components/QuickAccess";
+import DirectoryContentPage from "./pages/DirectoryContentPage";
+import QuickAccessPage from "./pages/QuickAccessPage";
+import Index from "./pages/Index";
 
 function App() {
 
@@ -13,15 +14,15 @@ function App() {
     <BrowserRouter>
       <GlobalContextProvider>
         <Routes>
-          <Route path="/" element={<div>Pagina para crear un sistema de archivos</div>} />
+          <Route path="/" element={<Index />} />
           
           <Route path="/app" element={<MainLayout />}>
-            <Route index element={<Index />} />
-            <Route path="/app/quickAccess" element={<QuickAccess />}/>
+            <Route index element={<VirtualDisksPage />} />
+            <Route path="/app/quickAccess" element={<QuickAccessPage />}/>
 
             <Route path=":diskId">
-              <Route index element={<DirectoryContent />} />
-              <Route path=":directoryId" element={<DirectoryContent />} />
+              <Route index element={<DirectoryContentPage />} />
+              <Route path=":directoryId" element={<DirectoryContentPage />} />
             </Route>
           </Route>
 

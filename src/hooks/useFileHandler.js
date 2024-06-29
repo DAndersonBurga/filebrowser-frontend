@@ -42,8 +42,6 @@ const useFileHandler = () => {
     
     const handleClickPasteAction = async (file) => {
 
-        console.log(file);
-        
         elementActionInfo.destinationDiskId = diskId ? diskId : file.diskId
         elementActionInfo.destinationParentId = directoryId ? directoryId : (file?.parentId ? file.parentId : diskId)
     
@@ -89,7 +87,7 @@ const useFileHandler = () => {
             
             await deleteFile(
                 diskId ? diskId : file.diskId, 
-                directoryId ? directoryId : file.parentId, 
+                directoryId ? directoryId : (file?.parentId ? file.parentId : diskId), 
                 selectedFileId
             )
             setSelectedFileId("")

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import BackIcon from "../icons/other/BackIcon"
 import useGlobalContext from "../hooks/useGlobalContext"
 import File from "./File"
@@ -8,10 +8,13 @@ const Table = ({ files }) => {
     const { store } = useGlobalContext()
     const { popFromStackPath } = store;
 
+    const location = useLocation();
     const navigate = useNavigate();
 
     const handleOnClickBack = () => {
-        popFromStackPath()
+        if(location.pathname !== "/app/quickAccess") {
+            popFromStackPath()
+        }
 
         navigate(-1)
     }

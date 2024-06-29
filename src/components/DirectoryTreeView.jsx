@@ -1,93 +1,107 @@
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import FolderIcon from "../icons/files/FolderIcon";
 import TextFileIcon from "../icons/files/TextFileIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FolderOpenIcon from "../icons/files/FolderOpenIcon";
+import useGlobalContext from "../hooks/useGlobalContext";
+import { getTreeView } from "../helpers/files";
+import { Link } from "react-router-dom";
+import { FILE_TYPE } from "../constants/file";
+import HardDiskIcon from "../icons/files/HardDiskIcon";
 
 const DirectoryTreeView = () => {
 
-  const [expandedIds, setExpandedIds] = useState();
-
-  const folder = {
+  const [expandedIds, setExpandedIds] = useState([]);
+  const [treeView, setTreeView] = useState({
     name: "",
-    children: [
-      {
-        name: "folder1",
-        children: [{ name: "file1.txt" }, { name: "file2.txt" }],
-      },
-      {
-        name: "folder2",
-        children: [
-          {
-            name: "folder3",
-            children: [{ name: "file3.txt" }],
-          },
-          { name: "react", children: [{ name: "file4.txt" }] },
-        ],
-      },
-      {
-        name: "file5.txt",
-      },
-      {
-        name: "file6.txt",
-      },
-      {
-        name: "file7.txt",
-      },
-    ],
-  };
+    children: []
+  });
 
-  const data = flattenTree(folder)
+  const { store } = useGlobalContext();
+  const { files, disks, pushToStackPath } = store;
 
-  const Folder = ({ isOpen }) => {
+  useEffect(() => {
+    const getTree = async () => {
+      const { data } = await getTreeView();
+      const tree = {
+        name: "",
+        children: data
+      }
+
+      setTreeView(tree)
+    }
+
+    getTree();
+  }, [files, disks])
+
+  const data = flattenTree(treeView)
+
+  const asignedRoute = (element) => {
+
+    if (element?.metadata?.fileType === FILE_TYPE.VIRTUAL_DISK) {
+      return `/app/${element?.metadata?.id}`
+    }
+
+    return `/app/${element?.metadata?.diskId}/${element?.metadata?.id}`
+  }
+
+  const handleClickElement = (element) => {
+    pushToStackPath(element?.metadata?.path)
+  }
+
+  const Folder = ({ isOpen, element }) => {
+
     return (
-      <div className="w-6">
-        {isOpen ? (
+      <div className={`w-6 hover:bg-white/20 rounded-md flex items-center justify-center 
+        ${element?.metadata?.fileType === FILE_TYPE.VIRTUAL_DISK && isOpen ? "bg-white/20" : ""}`}
+      >
+        {element?.metadata?.fileType === FILE_TYPE.VIRTUAL_DISK ? (
+          <HardDiskIcon className="size-5 text-gray-100" />
+        ) : isOpen ? (
           <FolderOpenIcon className="size-6 text-sky-600" />
         ) : (
-          <FolderIcon className="size-6 text-sky-600"/>
+          <FolderIcon className="size-6 text-sky-600" />
         )}
       </div>
     )
   }
 
-  const File = () => {
-    return <TextFileIcon className="size-6 text-gray-100" />
-  }
-
   return (
     <section className="h-full bg-gray-800 w-2/12 p-2 text-white overflow-auto">
-      <button
-        className="p-1 bg-green-500 mb-2"
-        onClick={() => setExpandedIds([])}
-      >Colapsar</button>
+      {data.length > 1 && (
+        <>
+          <button
+            className="p-1 bg-green-500 mb-2"
+            onClick={() => setExpandedIds([])}
+          >Colapsar</button>
 
-      <TreeView
-        data={data}
-        arial-label="directory tree"
-        expandedIds={expandedIds}
-        defaultExpandedIds={[1]}
-        nodeRenderer={({
-          element,
-          isBranch,
-          isExpanded,
-          getNodeProps,
-          level
-        }) => (
-          <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) }} className="flex gap-1">
-              {isBranch ? (
-                <Folder isOpen={isExpanded}/>
-              ) : (
-                <File />
-              )}
+          <TreeView
+            data={data}
+            arial-label="directory tree"
+            expandedIds={expandedIds}
+            defaultExpandedIds={[1]}
+            nodeRenderer={({
+              element,
+              isExpanded,
+              getNodeProps,
+              level
+            }) => (
+              <div {...getNodeProps()} style={{ paddingLeft: 20 * (level - 1) }} className="flex gap-1">
 
-              <p className="pr-2 text-nowrap" onClick={() => {
-                console.log(expandedIds);
-                console.log(element);
-              }}>{element.name}</p>
-          </div>
-        )}
-      />
+                <Folder isOpen={isExpanded} element={element} />
+
+                <Link
+                  className="pr-2 text-nowrap hover:underline underline-offset-2"
+                  to={asignedRoute(element)}
+                  onClick={() => handleClickElement(element)}
+                >
+                  {element.name}
+                </Link>
+              </div>
+            )}
+          />
+        </>
+      )}
     </section>
   )
 }

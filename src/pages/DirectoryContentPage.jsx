@@ -2,18 +2,18 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
 import useGlobalContext from "../hooks/useGlobalContext"
-import ContextMenu from "./ContextMenu"
+import ContextMenu from "../components/ContextMenu"
 import { getFilesFromDirectory } from "../helpers/files"
-import FileForm from "./FileForm"
-import CustomModal from "./CustomModal"
-import Table from "./Table"
+import FileForm from "../components/FileForm"
+import CustomModal from "../components/CustomModal"
+import Table from "../components/Table"
 import useContextMenu from "../hooks/useContextMenu"
-import ContextMenuOptions from "./ContextMenuOptions"
+import ContextMenuOptions from "../components/ContextMenuOptions"
 import { getFilesFromDisk } from "../helpers/disks"
-import FileView from "./FileView"
-import FileProperties from "./FileProperties"
+import FileView from "../components/FileView"
+import FileProperties from "../components/FileProperties"
 
-const DirectoryContent = () => {
+const DirectoryContentPage = () => {
     const { store } = useGlobalContext()
     const { 
         files, setFiles, setContextMenu, contextMenu, modalIsOpen, closeModal,
@@ -96,4 +96,4 @@ const DirectoryContent = () => {
   )
 }
 
-export default DirectoryContent
+export default DirectoryContentPage

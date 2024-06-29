@@ -1,18 +1,27 @@
 import apiFileBrowser from "../api/apiFileBrowser";
 
+const getTreeView = async () => {
+    const response = await apiFileBrowser.get('/file/tree')
+
+    return response;
+
+}
+
 const getFilesFromDirectory = async (diskId, directoryId) => {
     const response = await apiFileBrowser.get(`/file/directory/${diskId}/${directoryId}`)
 
     return response;
 }
 
-const createTxtFile = async (data, diskId, directoryId) => {
+const createTxtFile = async (fileData, diskId, directoryId) => {
+    const { fileType, ...data } = fileData;
     const response = await apiFileBrowser.post(`/file/create-file/${diskId}/${directoryId}`, data)
 
     return response;
 }
 
-const createDirectory = async (data, diskId, directoryId) => {
+const createDirectory = async (fileData, diskId, directoryId) => {
+    const { fileType, ...data } = fileData;
     const response = await apiFileBrowser.post(`/file/create-folder/${diskId}/${directoryId}`, data)
 
     return response;
@@ -51,7 +60,8 @@ const cutFile = async (data) => {
     return await apiFileBrowser.post(`/file/cut`, newData)
 }
 
-const editFile = async (data, diskId, fileId) => {
+const editFile = async (fileData, diskId, fileId) => {
+    const { fileType, ...data } = fileData;
     return await apiFileBrowser.put(`/file/edit/${diskId}/${fileId}`, data) 
 }
 
@@ -67,5 +77,6 @@ export {
     cutFile,
     deleteFile,
     editFile,
-    findWithPath
+    findWithPath,
+    getTreeView
 }

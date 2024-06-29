@@ -32,6 +32,8 @@ const peekFromStackPath = (get) => () => {
 
 const useStore = create(devtools(
     persist( (set, get) => ({
+        fileSystemName: "",
+        setFileSystemName: (name) => set({ fileSystemName: name }),
 
         disks: [],
         setDisks: (disks) => set({ disks }),

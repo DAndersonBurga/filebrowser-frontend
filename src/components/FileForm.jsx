@@ -62,7 +62,7 @@ const FileForm = () => {
         setFiles(responseQuickAccess.data)
       }
 
-      toast.success(responseData.data.message)
+      toast.success(responseData.message)
       closeModal()
     } catch (error) {
       toast.error(error.response.data.message)

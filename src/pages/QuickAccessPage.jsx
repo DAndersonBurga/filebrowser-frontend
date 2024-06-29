@@ -1,16 +1,16 @@
 import { useEffect } from "react";
-import Table from "./Table"
+import Table from "../components/Table"
 import { getQuickAccess } from "../helpers/quickAccess";
 import useGlobalContext from "../hooks/useGlobalContext";
 import useContextMenu from "../hooks/useContextMenu";
-import ContextMenu from "./ContextMenu";
-import ContextMenuOptions from "./ContextMenuOptions";
-import CustomModal from "./CustomModal";
-import FileView from "./FileView";
-import FileProperties from "./FileProperties";
-import FileForm from "./FileForm";
+import ContextMenu from "../components/ContextMenu";
+import ContextMenuOptions from "../components/ContextMenuOptions";
+import CustomModal from "../components/CustomModal";
+import FileView from "../components/FileView";
+import FileProperties from "../components/FileProperties";
+import FileForm from "../components/FileForm";
 
-const QuickAccess = () => {
+const QuickAccessPage = () => {
 
     const { store } = useGlobalContext();
     const { 
@@ -74,4 +74,4 @@ const QuickAccess = () => {
   )
 }
 
-export default QuickAccess
+export default QuickAccessPage
