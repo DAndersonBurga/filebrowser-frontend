@@ -22,8 +22,17 @@ const uploadFileSystem = async (file) => {
 
 }
 
+const downloadFile = async (file) => {
+    return await apiFileBrowser.get(`/file-system/download/${file?.diskId}/${file?.id}`, {
+        responseType: "blob"
+    });
+}
+
+
+
 export {
     createFileSystem,
     exportFileSystem,
-    uploadFileSystem
+    uploadFileSystem,
+    downloadFile
 }

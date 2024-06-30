@@ -1,10 +1,11 @@
 import { toast } from "react-toastify"
-import { FILE_ACTION } from "../constants/file"
+import { FILE_ACTION, FILE_TYPE } from "../constants/file"
 import { copyFile, cutFile, deleteFile, getFilesFromDirectory } from "../helpers/files"
 import { getFilesFromDisk } from "../helpers/disks"
 import useGlobalContext from "./useGlobalContext"
 import { useParams } from "react-router-dom"
 import { createQuickAccess, getQuickAccess } from "../helpers/quickAccess"
+import { downloadFile } from "../helpers/fileSystem"
 
 const useFileHandler = () => {
 
@@ -142,6 +143,31 @@ const useFileHandler = () => {
         setFiles(filesResponse.data)
     }
 
+    const handleClickExportFile = async (file) => {
+        const response = await downloadFile(file)
+
+        const blob = new Blob([response.data])
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+
+        let filename;
+
+        if(file?.fileType === FILE_TYPE.TXT) {
+            filename = file?.name + ".txt"
+        } else {
+            filename = file?.name + ".zip"
+        }
+
+        link.setAttribute('download', `${filename}`); // Nombre del archivo
+        document.body.appendChild(link);
+        link.click();
+
+        // Limpiar la URL creada
+        window.URL.revokeObjectURL(url);
+    }
+
     return {
         handleClickCutAction,
         handleClickCopyAction,
@@ -149,7 +175,8 @@ const useFileHandler = () => {
         handleClickDeleteAction,
         handleClickEditAction,
         handleClickShowPropertiesAction,
-        handleClickCreateQuickAccess
+        handleClickCreateQuickAccess,
+        handleClickExportFile
     }
 }
 

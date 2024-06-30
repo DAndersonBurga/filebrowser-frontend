@@ -11,7 +11,7 @@ const ContextMenuOptions = () => {
 
     const { diskId, directoryId } = useParams();
 
-    const { handleClickCutAction, handleClickCopyAction, handleClickCreateQuickAccess,
+    const { handleClickCutAction, handleClickCopyAction, handleClickCreateQuickAccess, handleClickExportFile,
         handleClickPasteAction, handleClickDeleteAction, handleClickShowPropertiesAction } = useFileHandler();
 
     const file = useMemo(() => files?.find(f => f?.id === selectedFileId), [selectedFileId]);
@@ -47,9 +47,18 @@ const ContextMenuOptions = () => {
                     Propiedades
             </button>
 
+            <button
+                className="btn-context"
+                disabled={selectedFileId === ""}
+                onClick={() => handleClickExportFile(file)}
+            >
+                Exportar
+            </button>
+
             {(diskId || directoryId) && (
                 <button
                     className="btn-context"
+                    disabled={selectedFileId === ""}
                     onClick={handleClickCreateQuickAccess}
                 >
                     Crear acceso rápido
