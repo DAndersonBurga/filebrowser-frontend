@@ -48,7 +48,7 @@ const DirectoryContentPage = () => {
         if(!loading) {
             getFiles();
         }
-    }, [directoryId])
+    }, [directoryId, diskId])
 
 
   return (
