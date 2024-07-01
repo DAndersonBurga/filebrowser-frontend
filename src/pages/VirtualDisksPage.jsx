@@ -91,14 +91,12 @@ const VirtualDisksPage = () => {
             Nuevo
           </button>
 
-          <button className={"btn-context"} disabled={diskId === ""}>Eliminar</button>
           <button 
             onClick={handleClickShowPropertiesAction}
             className={"btn-context"} disabled={diskId === ""}
           >
             Propiedades
           </button>
-          <button className={"btn-context"} disabled={diskId === ""}>Editar</button>
         </ContextMenu>
       )}
 

@@ -1,6 +1,5 @@
 import TreeView, { flattenTree } from "react-accessible-treeview";
 import FolderIcon from "../icons/files/FolderIcon";
-import TextFileIcon from "../icons/files/TextFileIcon";
 import { useEffect, useState } from "react";
 import FolderOpenIcon from "../icons/files/FolderOpenIcon";
 import useGlobalContext from "../hooks/useGlobalContext";
