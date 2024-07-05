@@ -3,11 +3,11 @@ import { toast } from "react-toastify"
 import { useForm } from "react-hook-form"
 import { useLocation, useParams } from "react-router-dom"
 
-import { FILE_TYPE } from "../constants/file"
-import { createDirectory, createTxtFile, editFile, getFilesFromDirectory } from "../helpers/files"
-import { getFilesFromDisk } from "../helpers/disks"
-import useGlobalContext from "../hooks/useGlobalContext"
-import { getQuickAccess } from "../helpers/quickAccess"
+import { FILE_TYPE } from "../../constants/file"
+import { createDirectory, createTxtFile, editFile, getFilesFromDirectory } from "../../helpers/files"
+import { getFilesFromDisk } from "../../helpers/disks"
+import useGlobalContext from "../../hooks/useGlobalContext"
+import { getQuickAccess } from "../../helpers/quickAccess"
 
 const FileForm = () => {
 

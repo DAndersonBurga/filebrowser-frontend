@@ -1,10 +1,10 @@
 import { Link, useParams } from "react-router-dom";
-import useGlobalContext from "../hooks/useGlobalContext"
-import { FILE_TYPE } from "../constants/file";
-import TextFileIcon from "../icons/files/TextFileIcon";
-import FolderIcon from "../icons/files/FolderIcon";
-import { formatDate } from "../helpers";
-import useFileHandler from "../hooks/useFileHandler";
+import useGlobalContext from "../../hooks/useGlobalContext"
+import { FILE_TYPE } from "../../constants/file";
+import TextFileIcon from "../../icons/files/TextFileIcon";
+import FolderIcon from "../../icons/files/FolderIcon";
+import { formatDate } from "../../helpers";
+import useFileHandler from "../../hooks/useFileHandler";
 
 const File = ({ file }) => {
 

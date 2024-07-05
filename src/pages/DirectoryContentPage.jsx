@@ -2,16 +2,16 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
 import useGlobalContext from "../hooks/useGlobalContext"
-import ContextMenu from "../components/ContextMenu"
 import { getFilesFromDirectory } from "../helpers/files"
-import FileForm from "../components/FileForm"
-import CustomModal from "../components/CustomModal"
-import Table from "../components/Table"
 import useContextMenu from "../hooks/useContextMenu"
-import ContextMenuOptions from "../components/ContextMenuOptions"
 import { getFilesFromDisk } from "../helpers/disks"
-import FileView from "../components/FileView"
-import FileProperties from "../components/FileProperties"
+import ContextMenu from "../components/contextMenu/ContextMenu"
+import ContextMenuOptions from "../components/contextMenu/ContextMenuOptions"
+import FilesTable from "../components/file/FilesTable"
+import CustomModal from "../components/modal/CustomModal"
+import FileProperties from "../components/file/FileProperties"
+import FileForm from "../components/file/FileForm"
+import FileView from "../components/file/FileView"
 
 const DirectoryContentPage = () => {
     const { store } = useGlobalContext()
@@ -68,7 +68,7 @@ const DirectoryContentPage = () => {
             </ContextMenu>
         )}
 
-        <Table
+        <FilesTable
           files={files}
         />
 

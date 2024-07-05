@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import useGlobalContext from "../hooks/useGlobalContext"
-import { formatDate } from "../helpers"
+import useGlobalContext from "../../hooks/useGlobalContext"
+import { formatDate } from "../../helpers"
 
 const FileProperties = ({ disk }) => {
     const { store } = useGlobalContext()

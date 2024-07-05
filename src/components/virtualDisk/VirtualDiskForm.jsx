@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { createDisk, getAllDisks } from "../helpers/disks";
-import useGlobalContext from "../hooks/useGlobalContext";
+import { createDisk, getAllDisks } from "../../helpers/disks";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 const VirtualDiskForm = () => {
 

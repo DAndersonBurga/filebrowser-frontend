@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import BackIcon from "../icons/other/BackIcon"
-import useGlobalContext from "../hooks/useGlobalContext"
+import BackIcon from "../../icons/other/BackIcon"
+import useGlobalContext from "../../hooks/useGlobalContext"
 import File from "./File"
 
-const Table = ({ files }) => {
+const FilesTable = ({ files }) => {
 
     const { store } = useGlobalContext()
     const { popFromStackPath } = store;
@@ -63,9 +63,7 @@ const Table = ({ files }) => {
                             key={file.id}
                             file={file}
                         />
-                    ))}
-
-                    
+                    ))}   
        
                 </tbody>
             </table>
@@ -74,4 +72,4 @@ const Table = ({ files }) => {
     )
 }
 
-export default Table
+export default FilesTable

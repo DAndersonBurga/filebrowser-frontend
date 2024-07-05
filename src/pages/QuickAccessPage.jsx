@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import Table from "../components/Table"
 import { getQuickAccess } from "../helpers/quickAccess";
 import useGlobalContext from "../hooks/useGlobalContext";
 import useContextMenu from "../hooks/useContextMenu";
-import ContextMenu from "../components/ContextMenu";
-import ContextMenuOptions from "../components/ContextMenuOptions";
-import CustomModal from "../components/CustomModal";
-import FileView from "../components/FileView";
-import FileProperties from "../components/FileProperties";
-import FileForm from "../components/FileForm";
+import ContextMenu from "../components/contextMenu/ContextMenu";
+import ContextMenuOptions from "../components/contextMenu/ContextMenuOptions";
+import FilesTable from "../components/file/FilesTable";
+import CustomModal from "../components/modal/CustomModal";
+import FileView from "../components/file/FileView";
+import FileProperties from "../components/file/FileProperties";
+import FileForm from "../components/file/FileForm";
 
 const QuickAccessPage = () => {
 
@@ -46,7 +46,7 @@ const QuickAccessPage = () => {
             </ContextMenu>
         )}
 
-        <Table
+        <FilesTable
             files={files}
         />
 

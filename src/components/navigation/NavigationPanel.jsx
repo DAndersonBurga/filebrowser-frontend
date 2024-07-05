@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import useGlobalContext from "../hooks/useGlobalContext";
-import SearchIcon from "../icons/search/SearchIcon";
+import useGlobalContext from "../../hooks/useGlobalContext";
+import SearchIcon from "../../icons/search/SearchIcon";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getFilesFromDisk } from "../helpers/disks";
-import { findWithPath, getFilesFromDirectory } from "../helpers/files";
+import { getFilesFromDisk } from "../../helpers/disks";
+import { findWithPath, getFilesFromDirectory } from "../../helpers/files";
 import { toast } from "react-toastify";
-import { getQuickAccess } from "../helpers/quickAccess";
+import { getQuickAccess } from "../../helpers/quickAccess";
 
 const NavigationPanel = () => {
 

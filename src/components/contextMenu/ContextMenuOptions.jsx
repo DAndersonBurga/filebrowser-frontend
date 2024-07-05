@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import useFileHandler from "../hooks/useFileHandler";
-import useGlobalContext from "../hooks/useGlobalContext";
-import { FILE_TYPE } from "../constants/file";
+import useFileHandler from "../../hooks/useFileHandler";
+import useGlobalContext from "../../hooks/useGlobalContext";
+import { FILE_TYPE } from "../../constants/file";
 import { useParams } from "react-router-dom";
 
 const ContextMenuOptions = () => {

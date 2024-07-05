@@ -1,5 +1,5 @@
 import { Box, Modal } from "@mui/material";
-import useGlobalContext from "../hooks/useGlobalContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 const style = {
     position: 'absolute',

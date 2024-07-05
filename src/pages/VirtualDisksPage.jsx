@@ -2,13 +2,13 @@ import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 
 import HardDiskIcon from "../icons/files/HardDiskIcon"
-import CustomModal from "../components/CustomModal";
-import VirtualDiskForm from "../components/VirtualDiskForm";
 import useGlobalContext from "../hooks/useGlobalContext";
 import { getAllDisks } from "../helpers/disks";
-import ContextMenu from "../components/ContextMenu";
-import FileProperties from "../components/FileProperties";
 import useFileHandler from "../hooks/useFileHandler";
+import ContextMenu from "../components/contextMenu/ContextMenu";
+import CustomModal from "../components/modal/CustomModal";
+import VirtualDiskForm from "../components/virtualDisk/VirtualDiskForm";
+import FileProperties from "../components/file/FileProperties";
 
 const VirtualDisksPage = () => {
 
@@ -129,7 +129,7 @@ const VirtualDisksPage = () => {
         </button>
       </div>
 
-      <CustomModal 
+      <CustomModal
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
       >
@@ -140,7 +140,7 @@ const VirtualDisksPage = () => {
         modalIsOpen={propertiesFileModalIsOpen}
         closeModal={() => setPropertiesFileModalIsOpen(false)}
       >
-        <FileProperties 
+        <FileProperties
           disk={disks?.find(disk => disk.id === diskId)}
         />
       </CustomModal>

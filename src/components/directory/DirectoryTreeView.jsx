@@ -1,12 +1,12 @@
 import TreeView, { flattenTree } from "react-accessible-treeview";
-import FolderIcon from "../icons/files/FolderIcon";
+import FolderIcon from "../../icons/files/FolderIcon";
 import { useEffect, useState } from "react";
-import FolderOpenIcon from "../icons/files/FolderOpenIcon";
-import useGlobalContext from "../hooks/useGlobalContext";
-import { getTreeView } from "../helpers/files";
+import FolderOpenIcon from "../../icons/files/FolderOpenIcon";
+import useGlobalContext from "../../hooks/useGlobalContext";
+import { getTreeView } from "../../helpers/files";
 import { Link } from "react-router-dom";
-import { FILE_TYPE } from "../constants/file";
-import HardDiskIcon from "../icons/files/HardDiskIcon";
+import { FILE_TYPE } from "../../constants/file";
+import HardDiskIcon from "../../icons/files/HardDiskIcon";
 
 const DirectoryTreeView = () => {
 

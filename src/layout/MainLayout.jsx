@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
-import DirectoryTreeView from "../components/DirectoryTreeView"
-import NavigationPanel from "../components/NavigationPanel"
-import Toolbar from "../components/Toolbar"
+import Toolbar from "../components/toolbar/Toolbar"
+import DirectoryTreeView from "../components/directory/DirectoryTreeView"
+import NavigationPanel from "../components/navigation/NavigationPanel"
 
 
 const MainLayout = () => {

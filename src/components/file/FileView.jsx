@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import useGlobalContext from "../hooks/useGlobalContext"
+import useGlobalContext from "../../hooks/useGlobalContext"
 
 const FileView = () => {
 

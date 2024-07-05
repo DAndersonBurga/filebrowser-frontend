@@ -1,4 +1,4 @@
-import useGlobalContext from "../hooks/useGlobalContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 const ContextMenu = ({ children }) => {
 
